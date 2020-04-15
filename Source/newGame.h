@@ -119,8 +119,8 @@ void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song)
         else
         {
             imageShow(rendGame, "resources/pauseUI.png", 300, 0);
-            textSet1(rendGame, "Continue", 20, 1, 2, 412, 348);
-            textSet1(rendGame, "Exit", 20, 1, 2, 593, 348);
+            textSet1(rendGame, "Continue", 20, 2, 2, 412, 348);
+            textSet1(rendGame, "Exit", 20, 2, 2, 593, 348);
 
             if (checkMouseHover(CONTINUE_X_START,CONTINUE_Y_START,CONTINUE_X_END,CONTINUE_Y_END) == true)
                 imageShow(rendGame, "resources/pauseUIhighlight.png", CONTINUE_X_START, CONTINUE_Y_START);

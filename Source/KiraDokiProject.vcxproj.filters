@@ -74,5 +74,11 @@
     <ClInclude Include="mouseEvent.h">
       <Filter>Header Files\Engines</Filter>
     </ClInclude>
+    <ClInclude Include="UIconfig.h">
+      <Filter>Header Files\Menu &amp; Game</Filter>
+    </ClInclude>
+    <ClInclude Include="songconfig.h">
+      <Filter>Header Files\Menu &amp; Game</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

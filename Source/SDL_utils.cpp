@@ -53,3 +53,4 @@ void waitUntilKeyPressed()
 int randomSpawn() {
     return rand() % 5;
 }
+

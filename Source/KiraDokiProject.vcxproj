@@ -153,6 +153,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="beatFrameStablizer.h" />
+    <ClInclude Include="songconfig.h" />
+    <ClInclude Include="UIconfig.h" />
     <ClInclude Include="mainMenu.h" />
     <ClInclude Include="mouseEvent.h" />
     <ClInclude Include="imageEngine.h" />

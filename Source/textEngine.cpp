@@ -23,7 +23,7 @@ SDL_Rect desRect;
 string oldTextInput1;
 string oldTextInput2;
 
-string font[5] = { "fonts/Halogen.ttf" , "fonts/Aller_Rg.ttf" };
+string font[5] = { "fonts/Halogen.ttf" , "fonts/Aller_Rg.ttf", "fonts/RifficFree-Bold.ttf" };
 
 
 void textInit()
