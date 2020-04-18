@@ -1,4 +1,3 @@
-
 string background[3] = { "resources/bg/background_blue.png","resources/bg/background_brown.png", "resources/bg/background_purple.png" };
 string songbox[3] = { "resources/bg/songbox_blue.png","resources/bg/songbox_brown.png", "resources/bg/songbox_purple.png" };
 string charbox[3] = { "resources/bg/charbox_blue.png","resources/bg/charbox_brown.png", "resources/bg/charbox_purple.png" };

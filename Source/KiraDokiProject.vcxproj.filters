@@ -42,6 +42,9 @@
     <ClCompile Include="textEngine.cpp">
       <Filter>Source Files\Engines</Filter>
     </ClCompile>
+    <ClCompile Include="mainMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imageEngine.h">
