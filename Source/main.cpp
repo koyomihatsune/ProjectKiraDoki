@@ -8,6 +8,7 @@
 #include "SDL_utils.h"
 #include "mainMenu.h"
 
+
 bool welcome = false;
 
 using namespace std;

@@ -37,9 +37,7 @@ void initGuide(SDL_Renderer* rendGame)
 void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song)
 
 {
-    Note n;
-    n.bpm = songBPM;
-    n.speed = songSpeed;
+    Note n;  n.bpm = songBPM; n.speed = songSpeed;
 
     bool gamePause = false;
     bool gameExit = false;
@@ -130,16 +128,15 @@ void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song)
         }
 
         textSet1(rendGame, to_string(n.score), 32, 1, 2, 35, 60);
+
         SDL_RenderPresent(rendGame);
  
+        //stablize frame and beat
         if (gamePause == false)
             frameStablizer1(&n, &frameStart);
 
-
         //find lastest tile
-        float tilePosMax = 0;
-        int tileLastest = -1;
-
+        float tilePosMax = 0; int tileLastest = -1;
         for (int b = 0; b < 10; b++)
             if (n.tileStatus[b] == true && n.tilePos[b] > tilePosMax && n.tilePress[b] != true)
             {
@@ -147,6 +144,7 @@ void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song)
                 tileLastest = b;
             }
 
+        //game event
         while (SDL_PollEvent(&gameEvent) != 0)
         {
             if (gameEvent.type == SDL_QUIT) break;
@@ -157,17 +155,13 @@ void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song)
                 {
                 case SDLK_ESCAPE: break;
                 case SDLK_x:
-                    if (n.tileLane[tileLastest] == 0) check = true;
-                    break;
+                    if (n.tileLane[tileLastest] == 0) check = true; break;
                 case SDLK_c:
-                    if (n.tileLane[tileLastest] == 1) check = true;
-                    break;
+                    if (n.tileLane[tileLastest] == 1) check = true; break;
                 case SDLK_v:
-                    if (n.tileLane[tileLastest] == 2) check = true;
-                    break;
+                    if (n.tileLane[tileLastest] == 2) check = true; break;
                 case SDLK_b:
-                    if (n.tileLane[tileLastest] == 3) check = true;
-                    break;
+                    if (n.tileLane[tileLastest] == 3) check = true; break;
                 case SDLK_n:
                     if (n.tileLane[tileLastest] == 4) check = true;
                     break;
@@ -223,7 +217,6 @@ void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song)
                 }
             }
 
-    
         }
 
         if (n.health <= 0)
@@ -255,10 +248,5 @@ void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song)
                 break;
             }
         }
-
-
-
     }
-
-    
 }

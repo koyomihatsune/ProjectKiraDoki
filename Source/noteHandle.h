@@ -24,6 +24,9 @@ extern struct Note
     int score = 0;
 
     bool spawnCheck = false;
+    bool energyActivate = false;
+
+    int energyCount = 0;
 
     //CONTROL SPEED AND DIFFICULTY VARIABLES
     int bpm;  //beats per minutes variety btwn songs. the demo yourreality_2m.ogg has 105 bpm
@@ -87,7 +90,7 @@ extern struct Note
             imageShow(renderer, stagelight[random[i]].c_str(), 300 + i * 100, 720 - 57);
     }
 
- 
+
     void removeStatus() //remove the note that is out of screen
     {
         for (int k = 0; k < 10; k++)

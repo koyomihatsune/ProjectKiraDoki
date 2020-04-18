@@ -48,8 +48,6 @@ void songPicker(SDL_Renderer* renderer)
 		imageShow(renderer, charimage[pickedchar].c_str(), 532, 0);
 		imageShow(renderer, charbox[pickedchar].c_str(), 572, 418);
 
-
-
 		//CHECK HOVER PLAY BUTTON
 		if (checkMouseHover(1017, 551, 1017 + 150, 551 + 80) == true)
 			imageShow(renderer, playhover[pickedchar].c_str(), 1017, 551);
@@ -278,26 +276,8 @@ void showMenu(SDL_Renderer* renderer, int n)
 
 
 		if (songPickerShow == true)
-		{
-			/*
-			for (int i = 0; i > -348; i -= 40)
-			{
-				SDL_RenderClear(renderer);
-				imageShow(renderer, "resources/songpick1.png", -1280, 0);
-				imageShow(renderer, "resources/menuplay.png", 0 + i, 0);
-				SDL_RenderPresent(renderer);
-			}
-
-			for (int i = -1280; i <= 0; i = i += 50 )
-			{
-				SDL_RenderClear(renderer);
-				imageShow(renderer, "resources/songpick1.png", i, 0);
-				SDL_RenderPresent(renderer);
-			}
-			*/
 			songPicker(renderer);
 
-		}
 		SDL_RenderPresent(renderer);
 	}
 }
