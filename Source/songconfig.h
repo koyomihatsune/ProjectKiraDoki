@@ -1,31 +1,27 @@
 #pragma once
-string songs[10] = { "Your Reality", "Fur Elise", "Alla Turca", "Song 4", "Song 5","Song 6", "Song 7", "Song 8", "Song 9", "Song 10" };
+string songs[10] = { "Fur Elise Remix", "Fur Elise", "Alla Turca", "Your Reality", "Song 5","Song 6", "Song 7", "Song 8", "Song 9", "Song 10" };
 string modes[3] = { "Easy", "Medium", "Hard" };
 string characters[3] = { "DJ Turo", "Hanako", "Tsubaki" };
 string songinstant[10];
 
-string info[12] = {		
-						"World-qualified DJ with ",
-						"flying colors.",
-						"Just play & see what surprise",
-						"Turo can bring you!",
-						
-						"A girl who fell in love",
-						"with her guitar.",
-						"Hanako give you special ",
-						"notes with more score!",
+string songlocation[10] = { "songs/fureliseremix.ogg",
+								"songs/furelise1.ogg",
+								"Song 3",
+								"songs/yourreality.ogg",
+								"Song 5",
+								"Song 6",
+								"Song 7",
+								"Song 8",
+								"Song 9",
+								"Song 10" };
 
-						"This girl's talent can ",
-						"deeply touch your heart.",
-						"Tsubaki give you more health ",
-						"while playing!",
-					};
 
-int easybpm[10] = { 60, 73, 0, 0, 0, 0, 0, 0, 0, 0 };
-float easyspeed[10] = { 3.4, 3.7, 0, 0, 0, 0, 0, 0, 0, 0 };
+int easybpm[10] = { 73, 73, 0, 60, 0, 0, 0, 0, 0, 0 };
+float easyspeed[10] = { 3.7, 3.7, 0, 3.4, 0, 0, 0, 0, 0, 0 };
 
-int mediumbpm[10] = { 120, 73 * 2, 0, 0, 0, 0, 0, 0, 0, 0 };
-float mediumspeed[10] = { 5.5, 6.0, 0, 0, 0, 0, 0, 0, 0, 0 };
+int mediumbpm[10] = { 73 * 2, 73 * 2, 0, 120, 0, 0, 0, 0, 0, 0 };
+float mediumspeed[10] = { 6.0, 6.0, 0, 5.5, 0, 0, 0, 0, 0, 0 };
 
-int hardbpm[10] = { 210, 292, 0, 0, 0, 0, 0, 0, 0, 0 };
-float hardspeed[10] = { 8.0, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
+int hardbpm[10] = { 292, 292, 0, 210, 0, 0, 0, 0, 0, 0 };
+float hardspeed[10] = { 10, 10, 0, 8.0, 0, 0, 0, 0, 0, 0 };
+

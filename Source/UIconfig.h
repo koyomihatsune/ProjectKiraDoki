@@ -35,3 +35,20 @@ const int HELP_POS_START_X = 269, HELP_POS_START_Y = 526, HELP_POS_END_X = 269 +
 const int QUIT_POS_START_X = 269, QUIT_POS_START_Y = 587, QUIT_POS_END_X = 269+85, QUIT_POS_END_Y = 587+44; // 85x44
 
 const int LOGO_POS_START_X = 183, LOGO_POS_START_Y = 80;
+
+string info[12] = {
+						"World-qualified DJ with ",
+						"flying colors.",
+						"Just play & see what surprise",
+						"Turo can bring you!",
+
+						"A girl who fell in love",
+						"with her guitar.",
+						"Hanako give you special ",
+						"notes with more score!",
+
+						"This girl's talent can ",
+						"deeply touch your heart.",
+						"Tsubaki give you more health ",
+						"while playing!",
+};

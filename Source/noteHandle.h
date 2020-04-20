@@ -5,8 +5,7 @@
 #include <SDL_mixer.h>
 #include "imageEngine.h"
 
-
-extern string stagelight[5] = { "resources/bottomlane_1.png", "resources/bottomlane_2.png", "resources/bottomlane_3.png", "resources/bottomlane_4.png", "resources/bottomlane_1.png" };
+string stagelight[5] = { "resources/bottomlane_1.png", "resources/bottomlane_2.png", "resources/bottomlane_3.png", "resources/bottomlane_4.png", "resources/bottomlane_2.png" };
 using namespace std;
 
 int randomSpawn();
@@ -24,16 +23,13 @@ extern struct Note
     int score = 0;
 
     bool spawnCheck = false;
-    bool energyActivate = false;
-
-    int energyCount = 0;
 
     //CONTROL SPEED AND DIFFICULTY VARIABLES
     int bpm;  //beats per minutes variety btwn songs. the demo yourreality_2m.ogg has 105 bpm
     float speed;    //120-5.5 //420-17 //210-8 // change varieties depends on songs
     bool beat = true; //beat created with beatFrameStablizer
     
-    int random[5] = { 1,2,3,4,5 };
+    
 
     void render(SDL_Renderer* renderer)
     {
@@ -83,11 +79,6 @@ extern struct Note
                   SDL_SetRenderDrawColor(renderer, 149, 149, 149, 255); //blue
                SDL_RenderFillRect(renderer, &filled_rect);
             }
-        if (spawnCheck == true)
-            for (int i = 0; i < 5; i++)
-                   random[i] = randomSpawn();
-        for (int i = 0; i < 5; i++)
-            imageShow(renderer, stagelight[random[i]].c_str(), 300 + i * 100, 720 - 57);
     }
 
 

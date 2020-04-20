@@ -154,6 +154,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="beatFrameStablizer.h" />
+    <ClInclude Include="gameconfig.h" />
     <ClInclude Include="songconfig.h" />
     <ClInclude Include="UIconfig.h" />
     <ClInclude Include="mainMenu.h" />

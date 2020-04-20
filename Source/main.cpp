@@ -7,6 +7,8 @@
 
 #include "SDL_utils.h"
 #include "mainMenu.h"
+//#include "imageEngine.h"
+
 
 
 bool welcome = false;
@@ -24,7 +26,21 @@ int main(int argc, char* argv[])
 {
 	initSDL(window, renderer, SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE);
     srand(time(0));
-    initMedia();
-    showMenu(renderer, 1);
+    initMedia(); showMenu(renderer, 2); //for welcome screen and intialization change 2 to 1;
+ 
+    /*
+     while (true)
+    {
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); SDL_RenderClear(renderer);
+
+       
+        // 393 328 720 360
+
+
+        SDL_RenderPresent(renderer);
+       
+    }*/
+   
+   
     return 0;
 }

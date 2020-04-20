@@ -143,7 +143,7 @@ void songPicker(SDL_Renderer* renderer)
 					Mix_HaltMusic();
 					sfxPlay(2);
 					//showMenu(renderer, 2);
-					gameStart(renderer, bpmin, speedin, pickedsong);
+					gameStart(renderer, bpmin, speedin, pickedsong, songlocation[pickedsong]);
 				}
 				else if (mX > 27 && mY > 75 && mX < 66 && mY < 119)
 				{
