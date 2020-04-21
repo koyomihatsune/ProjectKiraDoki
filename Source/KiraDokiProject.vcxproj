@@ -147,7 +147,10 @@
     <ClCompile Include="imageEngine.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mainMenu.cpp" />
+    <ClCompile Include="mouseEvent.cpp" />
     <ClCompile Include="musicEngine.cpp" />
+    <ClCompile Include="newGame.cpp" />
+    <ClCompile Include="noteHandle.cpp" />
     <ClCompile Include="SDL_utils.cpp" />
     <ClCompile Include="sfxEngine.cpp" />
     <ClCompile Include="textEngine.cpp" />

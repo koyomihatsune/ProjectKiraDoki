@@ -22,6 +22,9 @@
     <Filter Include="Source Files\Engines">
       <UniqueIdentifier>{5a488b85-9c73-4119-b153-107489d8ca13}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Menu &amp; Game\Configurations">
+      <UniqueIdentifier>{5a377c14-ff82-4017-9171-ea46b5891130}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -44,6 +47,15 @@
     </ClCompile>
     <ClCompile Include="mainMenu.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="noteHandle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="newGame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mouseEvent.cpp">
+      <Filter>Source Files\Engines</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -74,17 +86,17 @@
     <ClInclude Include="mouseEvent.h">
       <Filter>Header Files\Engines</Filter>
     </ClInclude>
-    <ClInclude Include="UIconfig.h">
-      <Filter>Header Files\Menu &amp; Game</Filter>
-    </ClInclude>
-    <ClInclude Include="songconfig.h">
+    <ClInclude Include="newGame.h">
       <Filter>Header Files\Menu &amp; Game</Filter>
     </ClInclude>
     <ClInclude Include="gameconfig.h">
-      <Filter>Header Files\Menu &amp; Game</Filter>
+      <Filter>Header Files\Menu &amp; Game\Configurations</Filter>
     </ClInclude>
-    <ClInclude Include="newGame.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="UIconfig.h">
+      <Filter>Header Files\Menu &amp; Game\Configurations</Filter>
+    </ClInclude>
+    <ClInclude Include="songconfig.h">
+      <Filter>Header Files\Menu &amp; Game\Configurations</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
