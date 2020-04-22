@@ -30,21 +30,46 @@ int feverChargeState;
 int feverChargePress;
 int feverChargeMax;
 
-
 //for zoom animation
 int zoom;
 bool zoomfinish;
 
+//other
+int maxhealth[3] = { 20,20,15 };
+int random[5] = { 1,2,3,4,5 };
+
 void initGuide(SDL_Renderer* rendGame)
 {
     musicPlay("songs/startgame.ogg");
-    SDL_RenderClear(rendGame);
+    SDL_SetRenderDrawColor(rendGame, 0, 0, 0, 255);
+    for (int i = 0; i <= 255; i += 10)
+    {
+        SDL_RenderClear(rendGame);
+        blendShow(rendGame, "resources/shadowguide.png", 0, 0, i);
+        SDL_RenderPresent(rendGame);
+    }
+    for (int i = 0; i <= 255; i += 5)
+    {
+        SDL_RenderClear(rendGame);
+        blendShow(rendGame, "resources/stage.png", 0, 0, i);
+        imageShow(rendGame, "resources/shadowguide.png", 0, 0);
+        SDL_RenderPresent(rendGame);
+    }
+
     imageShow(rendGame, "resources/stage.png", 0, 0);
     imageShow(rendGame, "resources/shadowguide.png", 0, 0);
     SDL_RenderPresent(rendGame);
-    SDL_Delay(7000);
-}
+    SDL_Delay(5000);
 
+    for (int i = 255; i >= 0; i -= 10)
+    {
+        SDL_RenderClear(rendGame);
+        imageShow(rendGame, "resources/stage.png", 0, 0);
+        blendShow(rendGame, "resources/shadowguide.png", 0, 0, i);
+        SDL_RenderPresent(rendGame);
+    }
+
+}
 void initStage(SDL_Renderer* rendGame)
 {
     int w, h;
@@ -59,8 +84,7 @@ void initStage(SDL_Renderer* rendGame)
     texr1.x = 0; texr1.y = 0; texr1.w = w; texr1.h = h;
 
 }
-
-void initGame()
+void initGame(Note * n, int songBPM, float songSpeed, int character)
 {
     gamePause = false;
     gameExit = false;
@@ -79,23 +103,88 @@ void initGame()
 
     zoom = 1000;
     zoomfinish = false;
-}
 
+    (*n).bpm = songBPM;
+    (*n).speed = songSpeed;
+    (*n).health = maxhealth[character];
+    (*n).charskill = character;
+}
+void renderGameObjects(SDL_Renderer* rendGame, Note n, int character, int song)
+{
+    //render background
+    SDL_RenderCopy(rendGame, stage, NULL, &texr);
+    if (feverChargeActivated == true) SDL_RenderCopy(rendGame, stageblack, NULL, &texr1);
+
+    //render health bar
+    if (n.health < maxhealth[character] / 4) SDL_SetRenderDrawColor(rendGame, 216, 61, 61, 255);
+    else if (n.health >= maxhealth[character] / 4 && n.health <= maxhealth[character] / 2 + 2) SDL_SetRenderDrawColor(rendGame, 216, 165, 61, 255);
+    else if (n.health > maxhealth[character] / 2 + 2) SDL_SetRenderDrawColor(rendGame, 47, 220, 93, 255);
+    for (int i = 1; i < n.health; i++)
+    {
+        SDL_Rect filled_rect;
+        filled_rect.x = 34 + (float)(i - 1) * ((float)238 / maxhealth[character]);
+        filled_rect.y = 140;
+        filled_rect.w = ((float)238 / maxhealth[character] + 3);
+        filled_rect.h = 35;
+        SDL_RenderFillRect(rendGame, &filled_rect);
+    }
+
+    //render notes
+    n.render(rendGame);
+
+    //render the lane
+    for (int i = 1; i < 5; i++)
+    {
+        SDL_Rect filled_rect;
+        filled_rect.x = 300 + i * 100;
+        filled_rect.y = 0;
+        filled_rect.w = 2;
+        filled_rect.h = 720;
+        SDL_SetRenderDrawColor(rendGame, 240, 240, 240, 255);
+        SDL_RenderFillRect(rendGame, &filled_rect);
+    }
+
+    //render stagelight
+    if (feverChargeCompleted == true && frameFinished > feverstart[song])
+    {
+        if (n.beat == true)
+            for (int i = 0; i < 5; i++)   random[i] = randomSpawn();
+        for (int i = 0; i < 5; i++)
+            imageShow(rendGame, stagelight[random[i]].c_str(), 300 + i * 100, 720 - 57);
+    }
+    else
+    {
+        for (int i = 0; i < 5; i++)
+            imageShow(rendGame, stagelight[3].c_str(), 300 + i * 100, 720 - 57);
+        imageShow(rendGame, stagelight[0].c_str(), 300 + lastPressed * 100, 720 - 57);
+    }
+
+ 
+}
 void countdownActivate(SDL_Renderer* rendGame)
 {
     blendShow(rendGame, "resources/countdown.png", 301, 297, 180);
+    for (int i = 0; i<5; i++)
+     imageShow(rendGame, stagelight[2].c_str(), 300 + i * 100, 720 - 57);
     textSet1(rendGame, "3", 50, 0, 2, 524, 331);
     sfxPlay(1);
     SDL_RenderPresent(rendGame);
     SDL_Delay(1000);
 
     blendShow(rendGame, "resources/countdown.png", 301, 297, 180);
+    imageShow(rendGame, stagelight[3].c_str(), 300 + 0 * 100, 720 - 57);
+    imageShow(rendGame, stagelight[3].c_str(), 300 + 4 * 100, 720 - 57);
+    for (int i = 1; i < 4; i++)
+        imageShow(rendGame, stagelight[1].c_str(), 300 + i * 100, 720 - 57);
     textSet1(rendGame, "2", 50, 0, 2, 524, 331);
     sfxPlay(1);
     SDL_RenderPresent(rendGame);
     SDL_Delay(1000);
 
     blendShow(rendGame, "resources/countdown.png", 301, 297, 180);
+    for (int i = 0; i < 5; i++)
+        imageShow(rendGame, stagelight[3].c_str(), 300 + i * 100, 720 - 57);
+    imageShow(rendGame, stagelight[0].c_str(), 300 + 2 * 100, 720 - 57);
     textSet1(rendGame, "1", 50, 0, 2, 524, 331);
     sfxPlay(1);
     SDL_RenderPresent(rendGame);
@@ -110,7 +199,6 @@ void countdownActivate(SDL_Renderer* rendGame)
     Mix_ResumeMusic();
     countdownActivated = false;
 }
-
 void pauseActivate(SDL_Renderer* rendGame)
 {
     imageShow(rendGame, "resources/pauseUI.png", 300, 0);
@@ -122,7 +210,6 @@ void pauseActivate(SDL_Renderer* rendGame)
     if (checkMouseHover(EXIT_X_START, EXIT_Y_START, EXIT_X_END, EXIT_Y_END) == true)
         imageShow(rendGame, "resources/pauseUIhighlight.png", EXIT_X_START, EXIT_Y_START);
 }
-
 void feverCharge(SDL_Renderer* rendGame)
 {
     feverChargeActivated = true;
@@ -171,48 +258,28 @@ void feverCharge(SDL_Renderer* rendGame)
         imageZoomShow(rendGame, feverchargeimage[feverChargeState].c_str(), 557, 328, 1000, 1000);
 
 }
-
-void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song, string songlocation)
+void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song, string songlocation, int character)
 {
-    Note n;  n.bpm = songBPM; n.speed = songSpeed;
-    int random[5] = { 1,2,3,4,5 };
+    Note n;  
 
-    initGame();
+    //initialize game
+    initGame(&n, songBPM, songSpeed, character);
     initGuide(rendGame);
     initStage(rendGame);
+
+    //play music
     musicPlay(songlocation.c_str()); Mix_PauseMusic();
 
     while (gameExit == false)
     {
         frameStart = SDL_GetTicks();
- 
-
-        //clear renderer
         SDL_SetRenderDrawColor(rendGame, 255, 255, 255, 255); SDL_RenderClear(rendGame);
 
-        //show stage background
-        SDL_RenderCopy(rendGame, stage, NULL, &texr);
-        if (feverChargeActivated == true) SDL_RenderCopy(rendGame, stageblack, NULL, &texr1);
+        //render game objects
+        renderGameObjects(rendGame, n, character, song);
 
         //activate countdown
         if (countdownActivated == true) countdownActivate(rendGame);
-
-        //render the notes
-        n.render(rendGame);
-
-        //stagelight show normal
-        for (int i = 0; i < 5; i++)
-            imageShow(rendGame, stagelight[3].c_str(), 300 + i * 100, 720 - 57);
-        imageShow(rendGame, stagelight[0].c_str(), 300 + lastPressed * 100, 720 - 57);
-
-        //stagelight random show fever mode
-        if (feverChargeCompleted == true && frameFinished > feverstart[song])
-        {
-            if (n.beat == true)
-                for (int i = 0; i < 5; i++)   random[i] = randomSpawn();
-            for (int i = 0; i < 5; i++)
-                imageShow(rendGame, stagelight[random[i]].c_str(), 300 + i * 100, 720 - 57);
-        }
 
         if (gamePause == false)
         {
@@ -224,8 +291,6 @@ void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song, s
             //move notes
             n.move();
             n.removeStatus();
-
-            //ticks
             frameFinished++;
 
             //active fever charging
@@ -233,8 +298,7 @@ void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song, s
                 feverCharge(rendGame);
             if (frameFinished == feverchargeend[song]) feverChargeActivated = false;
         }
-        //active pause UI
-        else pauseActivate(rendGame);
+        else pauseActivate(rendGame); //active pause UI
 
         //show score
         textSet1(rendGame, to_string(n.score), 32, 1, 2, 35, 60);
@@ -242,6 +306,7 @@ void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song, s
         //DEBUG ONLY: show frame finished
         textSet1(rendGame, to_string(frameFinished), 32, 1, 2, 0, 0);
 
+        //render
         SDL_RenderPresent(rendGame);
 
         //stablize frame and beat
@@ -320,7 +385,7 @@ void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song, s
                             n.score += 1000;
                             lastPressed = n.tileLane[tileLastest];
                         }
-                        else n.health--;
+                        else if (mouseX>300 && mouseX<800) n.health--;
                     }
                     else if (gamePause == true)
                     {

@@ -16,6 +16,7 @@ extern struct Note
     //HEALTH AND SCORE COUNT
     int health = 20;
     int score = 0;
+    int charskill;
 
     bool spawnCheck = false;
 

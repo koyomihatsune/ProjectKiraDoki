@@ -11,32 +11,6 @@ using namespace std;
 
 void Note::render(SDL_Renderer* renderer)
 {
-    //render the lane
-    for (int i = 1; i < 5; i++)
-    {
-        SDL_Rect filled_rect;
-        filled_rect.x = 300 + i * 100;
-        filled_rect.y = 0;
-        filled_rect.w = 2;
-        filled_rect.h = 720;
-        SDL_SetRenderDrawColor(renderer, 240, 240, 240, 255);
-        SDL_RenderFillRect(renderer, &filled_rect);
-    }
-
-    //render health bar
-    if (health < 9) SDL_SetRenderDrawColor(renderer, 216, 61, 61, 255);
-    else if (health >= health / 4 + 1 && health <= health / 2 + 1) SDL_SetRenderDrawColor(renderer, 216, 165, 61, 255);
-    else if (health > health / 2 + 1) SDL_SetRenderDrawColor(renderer, 47, 220, 93, 255);
-    for (int i = 1; i < health; i++)
-    {
-        SDL_Rect filled_rect;
-        filled_rect.x = 34 + (i - 1) * 12;
-        filled_rect.y = 140;
-        filled_rect.w = 12;
-        filled_rect.h = 35;
-        SDL_RenderFillRect(renderer, &filled_rect);
-    }
-
     //render the notes
     for (int i = 0; i < 10; i++)
         if (tileStatus[i] == true)
@@ -64,13 +38,13 @@ void Note::removeStatus() //remove the note that is out of screen
             if (tilePress[k] == false) health--;
             cout << "Tile " << k << " at lane " << tileLane[k] << " at pos " << tilePos[k] << " removed." << endl;
         }
-
 }
 
 void Note::move() //move and spawn new notes
 {
 
     spawnCheck = false;
+
     if (beat == true && Mix_PlayingMusic() != 0) spawnCheck = true;
     for (int k = 0; k < 10; k++)
         if (tileStatus[k] == true)

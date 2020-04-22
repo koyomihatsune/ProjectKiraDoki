@@ -21,11 +21,200 @@ int pickedchar = 0;
 bool welcomecheck = true;
 int backgroundPos = 0;
 
+SDL_Texture* background1 = NULL; SDL_Texture* background2 = NULL;
+SDL_Rect bkt1, bkt2;
+
 void initMedia()
 {
 	textInit();
 }
+void welcomeAnimation(SDL_Renderer* renderer) 
+{
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+	for (int i = 0; i <= 255; i += 10)
+	{
+		SDL_RenderClear(renderer);
+		blendShow(renderer, "resources/welcome1.png", 0, 0, i);
+		SDL_RenderPresent(renderer);
+	}
+	SDL_Delay(2000);
+	for (int i = 255; i >= 0; i -= 10)
+	{
+		SDL_RenderClear(renderer);
+		blendShow(renderer, "resources/welcome1.png", 0, 0, i);
+		SDL_RenderPresent(renderer);
+	}
+	for (int i = 0; i <= 255; i += 10)
+	{
+		SDL_RenderClear(renderer);
+		blendShow(renderer, "resources/welcomescreen.png", 0, 0, i);
+		SDL_RenderPresent(renderer);
+	}
+	SDL_Delay(2000);
+	for (int i = 255; i >= 0; i -= 10)
+	{
+		SDL_RenderClear(renderer);
+		blendShow(renderer, "resources/welcomescreen.png", 0, 0, i);
+		SDL_RenderPresent(renderer);
+	}
 
+	pickedsong = 0;
+	pickedchar = rand() % 3;
+	songchecked[0] = true;
+	for (int i = 1; i < 10; i++) songchecked[i] = false;
+	modechecked[0] = true;
+	modechecked[1] = false;
+	modechecked[2] = false;
+	charchecked[pickedchar] = true;
+	background1 = IMG_LoadTexture(renderer, background[pickedchar].c_str());
+	background2 = IMG_LoadTexture(renderer, background[pickedchar].c_str());
+
+	backgroundPos = 48;
+
+	for (int i = 15; i <= 255; i += 10)
+	{
+		SDL_RenderClear(renderer);
+		backgroundPos -= 2;
+		blendShow(renderer, background[pickedchar].c_str(), backgroundPos, 0, i);
+		blendShow(renderer, background[pickedchar].c_str(), backgroundPos - 1300, 0, i);
+		SDL_RenderPresent(renderer);
+	}
+
+	backgroundPos = 0;
+
+	for (int i = 0; i <= 255; i += 30)
+
+	{
+		SDL_RenderClear(renderer);
+		showBackground(renderer, 1);
+		blendShow(renderer, charimage[pickedchar].c_str(), 532, 0, i);
+		blendShow(renderer, logo.c_str(), LOGO_POS_START_X, LOGO_POS_START_Y, i);
+		blendShow(renderer, startbutton[pickedchar].c_str(), START_POS_START_X, START_POS_START_Y, i);
+		blendShow(renderer, helpbutton[pickedchar].c_str(), HELP_POS_START_X, HELP_POS_START_Y, i);
+		blendShow(renderer, quitbutton[pickedchar].c_str(), QUIT_POS_START_X, QUIT_POS_START_Y, i);
+		SDL_RenderPresent(renderer);
+	}
+}
+void showBackground(SDL_Renderer* renderer, int n)
+{
+	if (n == 1) backgroundPos -= 2;
+	if (backgroundPos <= -1300) backgroundPos = 0;
+	int w, h;
+	SDL_QueryTexture(background1, NULL, NULL, &w, &h);
+	SDL_QueryTexture(background1, NULL, NULL, &w, &h);
+
+	bkt1.x = backgroundPos;
+	bkt1.y = 0;
+	bkt1.w = w;
+	bkt1.h = h;
+
+	bkt2.x = backgroundPos+1298;
+	bkt2.y = 0;
+	bkt2.w = w;
+	bkt2.h = h;
+
+	SDL_RenderCopy(renderer, background1, NULL, &bkt1);
+	SDL_RenderCopy(renderer, background2, NULL, &bkt2);
+}
+void showUI(SDL_Renderer* renderer)
+{
+	showBackground(renderer, 1);
+	imageShow(renderer, songpicktitle[pickedchar].c_str(), 88, 58);
+	imageShow(renderer, songbox[pickedchar].c_str(), 92, 151);
+	imageShow(renderer, charbox[pickedchar].c_str(), 365, 418);
+	imageShow(renderer, charimage[pickedchar].c_str(), 532, 0);
+	imageShow(renderer, charbox[pickedchar].c_str(), 572, 418);
+
+	//CHECK HOVER PLAY BUTTON
+	if (checkMouseHover(1017, 551, 1017 + 150, 551 + 80) == true)
+		imageShow(renderer, playhover[pickedchar].c_str(), 1017, 551);
+	else imageShow(renderer, playbutton[pickedchar].c_str(), 1017, 551);
+
+	//CHECK HOVER BACK BUTTON
+	if (checkMouseHover(27, 75, 66, 119) == true)
+		imageShow(renderer, backhover[pickedchar].c_str(), 24, 67);
+	else imageShow(renderer, backbutton[pickedchar].c_str(), 24, 67);
+
+}
+void showSongs(SDL_Renderer* renderer)
+{
+	//CHOSEN SONG
+	for (int i = 0; i < 10; i++)
+	{
+		//HOVER SONG
+		if (checkMouseHover(SONG_POS_START_X, SONG_POS_START_Y + i * 40, SONG_POS_END_X, SONG_POS_START_Y + i * 40 + 40) == true && songchecked[i] != true)
+			imageShow(renderer, hoverlong[pickedchar].c_str(), SONG_POS_START_X - 12, SONG_POS_START_Y - 11 + i * 40);
+
+		//TEXT SONG
+		if (songchecked[i] == true)
+		{
+			imageShow(renderer, chosenlong[pickedchar].c_str(), SONG_POS_START_X - 12, SONG_POS_START_Y - 11 + i * 40);
+			textSet1(renderer, songs[i], 30, 0, 2, SONG_POS_START_X + 12, SONG_POS_START_Y + i * 40);
+		}
+		else	textSet1(renderer, songs[i], 30, 0, 1, SONG_POS_START_X + 12, SONG_POS_START_Y + i * 40);
+	}
+}
+void showModes(SDL_Renderer* renderer, int * bpmin, float * speedin)
+{
+	//CHOSEN MODE
+	if (modechecked[0] == true)
+	{
+		imageShow(renderer, "resources/b/chosen2choose_green.png", MODE_POS_START_X - 12, MODE_POS_START_Y - 6);
+		*bpmin = easybpm[pickedsong];
+		*speedin = easyspeed[pickedsong];
+	}
+	if (modechecked[1] == true)
+	{
+		imageShow(renderer, "resources/b/chosen2choose_orange.png", MODE_POS_START_X - 12, MODE_POS_START_Y - 6 + 40);
+		*bpmin = mediumbpm[pickedsong];
+		*speedin = mediumspeed[pickedsong];
+	}
+	if (modechecked[2] == true)
+	{
+		imageShow(renderer, "resources/b/chosen2choose_red.png", MODE_POS_START_X - 12, MODE_POS_START_Y - 6 + 80);
+		*bpmin = hardbpm[pickedsong];
+		*speedin = hardspeed[pickedsong];
+	}
+
+	//HOVER & TEXT MODE
+	for (int i = 0; i < 3; i++)
+	{
+		//HOVER MODE
+		if (checkMouseHover(MODE_POS_START_X, MODE_POS_START_Y + i * 40, MODE_POS_END_X, MODE_POS_START_Y + i * 40 + 40) == true && modechecked[i] != true)
+			imageShow(renderer, hovershort[pickedchar].c_str(), MODE_POS_START_X - 12, MODE_POS_START_Y - 6 + i * 40);
+		//TEXT MODE
+		if (modechecked[i] != true)
+			textSet1(renderer, modes[i], 30, 0, 1, MODE_POS_START_X + 12, MODE_POS_START_Y + 5 + i * 40);
+		else	textSet1(renderer, modes[i], 30, 0, 2, MODE_POS_START_X + 12, MODE_POS_START_Y + 5 + i * 40);
+	}
+
+}
+void showChars(SDL_Renderer* renderer) {
+
+	//CHOSEN CHAR
+	for (int i = 0; i < 3; i++)
+	{
+		//HOVER
+		if (checkMouseHover(CHAR_POS_START_X, CHAR_POS_START_Y + i * 40, CHAR_POS_END_X, CHAR_POS_START_Y + i * 40 + 40) == true && charchecked[i] != true)
+			imageShow(renderer, hovershort[pickedchar].c_str(), CHAR_POS_START_X - 12, CHAR_POS_START_Y - 6 + i * 40);
+		//CHOSEN CHAR
+		if (charchecked[i] == true)
+		{
+			imageShow(renderer, chosenshort[pickedchar].c_str(), CHAR_POS_START_X - 12, CHAR_POS_START_Y - 6 + i * 40);
+			textSet1(renderer, info[i * 4], 25, 0, 1, 372, 226);
+			textSet1(renderer, info[i * 4 + 1], 25, 0, 1, 372, 258);
+			textSet1(renderer, info[i * 4 + 2], 25, 0, 1, 372, 302);
+			textSet1(renderer, info[i * 4 + 3], 25, 0, 1, 372, 334);
+			
+		}
+
+		//TEXT CHAR
+		if (charchecked[i] != true)
+			textSet1(renderer, characters[i], 30, 0, 1, CHAR_POS_START_X + 12, CHAR_POS_START_Y + 5 + i * 40);
+		else	textSet1(renderer, characters[i], 30, 0, 2, CHAR_POS_START_X + 12, CHAR_POS_START_Y + 5 + i * 40);
+	}
+
+}
 void songPicker(SDL_Renderer* renderer)
 {
 	SDL_Event e;
@@ -40,95 +229,10 @@ void songPicker(SDL_Renderer* renderer)
 	{
 		SDL_RenderPresent(renderer);
 		SDL_RenderClear(renderer);
-		SDL_Rect filled_rect;
-		showBackground(renderer, 1);
-		imageShow(renderer, songpicktitle[pickedchar].c_str(), 88, 58);
-		imageShow(renderer, songbox[pickedchar].c_str(), 92, 151);
-		imageShow(renderer, charbox[pickedchar].c_str(), 365, 418);
-		imageShow(renderer, charimage[pickedchar].c_str(), 532, 0);
-		imageShow(renderer, charbox[pickedchar].c_str(), 572, 418);
-
-		//CHECK HOVER PLAY BUTTON
-		if (checkMouseHover(1017, 551, 1017 + 150, 551 + 80) == true)
-			imageShow(renderer, playhover[pickedchar].c_str(), 1017, 551);
-		else imageShow(renderer, playbutton[pickedchar].c_str(), 1017, 551);
-
-		//CHECK HOVER BACK BUTTON
-		if (checkMouseHover(27, 75, 66, 119) == true)
-			imageShow(renderer, backhover[pickedchar].c_str(), 24, 67);
-		else imageShow(renderer, backbutton[pickedchar].c_str(), 24, 67);
-
-
-		//CHOSEN SONG
-		for (int i = 0; i < 10; i++)
-		{
-			//HOVER SONG
-			if (checkMouseHover(SONG_POS_START_X, SONG_POS_START_Y + i * 40, SONG_POS_END_X, SONG_POS_START_Y + i * 40 + 40) == true && songchecked[i] != true)
-				imageShow(renderer, hoverlong[pickedchar].c_str(), SONG_POS_START_X - 12, SONG_POS_START_Y - 11 + i * 40);
-
-			//TEXT SONG
-			if (songchecked[i] == true)
-			{
-				imageShow(renderer, chosenlong[pickedchar].c_str(), SONG_POS_START_X - 12, SONG_POS_START_Y - 11 + i * 40);
-				textSet1(renderer, songs[i], 30, 0, 2, SONG_POS_START_X + 12, SONG_POS_START_Y + i * 40);
-			}
-			else	textSet1(renderer, songs[i], 30, 0, 1, SONG_POS_START_X + 12, SONG_POS_START_Y + i * 40);
-		}
-
-		//CHOSEN MODE
-		if (modechecked[0] == true)
-		{
-			imageShow(renderer, "resources/b/chosen2choose_green.png", MODE_POS_START_X - 12, MODE_POS_START_Y - 6);
-			bpmin = easybpm[pickedsong];
-			speedin = easyspeed[pickedsong];
-		}
-		if (modechecked[1] == true)
-		{
-			imageShow(renderer, "resources/b/chosen2choose_orange.png", MODE_POS_START_X - 12, MODE_POS_START_Y - 6 + 40);
-			bpmin = mediumbpm[pickedsong];
-			speedin = mediumspeed[pickedsong];
-		}
-		if (modechecked[2] == true)
-		{
-			imageShow(renderer, "resources/b/chosen2choose_red.png", MODE_POS_START_X - 12, MODE_POS_START_Y - 6 + 80);
-			bpmin = hardbpm[pickedsong];
-			speedin = hardspeed[pickedsong];
-		}
-
-		//HOVER & TEXT MODE
-		for (int i = 0; i < 3; i++)
-		{
-			//HOVER MODE
-			if (checkMouseHover(MODE_POS_START_X, MODE_POS_START_Y + i * 40, MODE_POS_END_X, MODE_POS_START_Y + i * 40 + 40) == true && modechecked[i] != true)
-				imageShow(renderer, hovershort[pickedchar].c_str(), MODE_POS_START_X - 12, MODE_POS_START_Y - 6 + i * 40);
-			//TEXT MODE
-			if (modechecked[i] != true)
-				textSet1(renderer, modes[i], 30, 0, 1, MODE_POS_START_X + 12, MODE_POS_START_Y + 5 + i * 40);
-			else	textSet1(renderer, modes[i], 30, 0, 2, MODE_POS_START_X + 12, MODE_POS_START_Y + 5 + i * 40);
-		}
-
-
-		//CHOSEN CHAR
-		for (int i = 0; i < 3; i++)
-		{
-			//HOVER
-			if (checkMouseHover(CHAR_POS_START_X, CHAR_POS_START_Y + i * 40, CHAR_POS_END_X, CHAR_POS_START_Y + i * 40 + 40) == true && charchecked[i] != true)
-				imageShow(renderer, hovershort[pickedchar].c_str(), CHAR_POS_START_X - 12, CHAR_POS_START_Y - 6 + i * 40);
-			//CHOSEN CHAR
-			if (charchecked[i] == true)
-			{
-				imageShow(renderer, chosenshort[pickedchar].c_str(), CHAR_POS_START_X - 12, CHAR_POS_START_Y - 6 + i * 40);
-				textSet1(renderer, info[i * 4], 25, 0, 1, 372, 226);
-				textSet1(renderer, info[i * 4 + 1], 25, 0, 1, 372, 258);
-				textSet1(renderer, info[i * 4 + 2], 25, 0, 1, 372, 302);
-				textSet1(renderer, info[i * 4 + 3], 25, 0, 1, 372, 334);
-			}
-
-			//TEXT CHAR
-			if (charchecked[i] != true)
-				textSet1(renderer, characters[i], 30, 0, 1, CHAR_POS_START_X + 12, CHAR_POS_START_Y + 5 + i * 40);
-			else	textSet1(renderer, characters[i], 30, 0, 2, CHAR_POS_START_X + 12, CHAR_POS_START_Y + 5 + i * 40);
-		}
+		showUI(renderer);
+		showSongs(renderer);
+		showModes(renderer, &bpmin, &speedin);
+		showChars(renderer);
 
 		//if ((SDL_PollEvent(&e) == 0)) continue; else 
 		while (SDL_PollEvent(&e) != 0) //continue;
@@ -143,7 +247,7 @@ void songPicker(SDL_Renderer* renderer)
 					Mix_HaltMusic();
 					sfxPlay(2);
 					//showMenu(renderer, 2);
-					gameStart(renderer, bpmin, speedin, pickedsong, songlocation[pickedsong]);
+					gameStart(renderer, bpmin, speedin, pickedsong, songlocation[pickedsong], pickedchar);
 				}
 				else if (mX > 27 && mY > 75 && mX < 66 && mY < 119)
 				{
@@ -188,40 +292,17 @@ void songPicker(SDL_Renderer* renderer)
 							pickedchar = q;
 							for (int k = 0; k < 3; k++)
 								if (k != q) charchecked[k] = false;
+							background1 = IMG_LoadTexture(renderer, background[pickedchar].c_str());
+							background2 = IMG_LoadTexture(renderer, background[pickedchar].c_str());
 						}
 				}
 		}
 	}
 }
-
 void showMenu(SDL_Renderer* renderer, int n)
 {
 	musicPlay("songs/theme.ogg");
-
-	if (n == 1)
-	{
-		bool welcomeFinish = false;
-
-		SDL_RenderClear(renderer);
-		imageShow(renderer, "resources/welcome1.png", 0, 0);
-		SDL_RenderPresent(renderer);
-
-		SDL_Delay(2000);
-
-		SDL_RenderClear(renderer);
-		imageShow(renderer, "resources/welcomescreen.png", 0, 0);
-		SDL_RenderPresent(renderer);
-		SDL_Delay(3000);
-
-		pickedsong = 0;
-		pickedchar = rand() % 3;
-		songchecked[0] = true;
-		for (int i = 1; i < 10; i++) songchecked[i] = false;
-		modechecked[0] = true;
-		modechecked[1] = false;
-		modechecked[2] = false;
-		charchecked[pickedchar] = true;
-	}
+	if (n == 1) welcomeAnimation(renderer);
 
 	bool songPickerShow = false;
 	SDL_Event e;
@@ -280,13 +361,4 @@ void showMenu(SDL_Renderer* renderer, int n)
 
 		SDL_RenderPresent(renderer);
 	}
-}
-
-void showBackground(SDL_Renderer* renderer, int n)
-{
-	if (n == 1) backgroundPos -= 2;
-	if (backgroundPos <= -1300)
-		backgroundPos = 0;
-	imageShow(renderer, background[pickedchar].c_str(), backgroundPos, 0);
-	imageShow(renderer, background[pickedchar].c_str(), backgroundPos + 1298, 0);
 }

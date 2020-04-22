@@ -44,11 +44,11 @@ string info[12] = {
 
 						"A girl who fell in love",
 						"with her guitar.",
-						"Hanako give you special ",
+						"Hanako gives you special ",
 						"notes with more score!",
 
 						"This girl's talent can ",
 						"deeply touch your heart.",
-						"Tsubaki give you more health ",
+						"Tsubaki gives you more health ",
 						"while playing!",
 };
