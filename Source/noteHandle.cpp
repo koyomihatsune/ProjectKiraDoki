@@ -27,9 +27,9 @@ void Note::render(SDL_Renderer* renderer)
                 SDL_SetRenderDrawColor(renderer, 153, 204, 255, 255);
                else
                {
-                   if (charskill == 1) //DJ Turo
+                   if (charskill == 1) //Hanako
                        SDL_SetRenderDrawColor(renderer, 204, 136, 0, 255);
-                   else if (charskill == 0)
+                   else if (charskill == 0) //DJ Turo
                        SDL_SetRenderDrawColor(renderer, 0, 255, 191, 255);
                }
             }

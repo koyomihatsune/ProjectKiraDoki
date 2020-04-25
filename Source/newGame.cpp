@@ -15,7 +15,11 @@
 
 SDL_Texture* stage = NULL;
 SDL_Texture* stageblack = NULL;
-SDL_Rect texr, texr1;
+SDL_Texture* charimg = NULL;
+SDL_Texture* thugimg = NULL;
+SDL_Texture* firework1 = NULL;
+SDL_Texture* firework2 = NULL;
+SDL_Rect texr, texr1, chartexr;
 SDL_Event gameEvent;
 Uint32 frameStart;
 
@@ -24,11 +28,12 @@ bool gamePause, gameExit, countdownActivated, gameLose, pauseStartRecord = false
 int lastPressed;
 
 //for fever mode
-bool feverChargeActivated, feverChargeCompleted, feverAnimation;
+bool feverChargeActivated, feverChargeCompleted, feverAnimation, feverNoti = true;
 int frameFinished;
 int feverChargeState;
 int feverChargePress;
 int feverChargeMax;
+
 
 //for zoom animation
 int zoom;
@@ -46,7 +51,8 @@ int maxhealth[3] = { 20,20,15 };
 int random[5] = { 1,2,3,4,5 };
 Timer songTime;
 
-void initGuide(SDL_Renderer* rendGame)
+
+void initGuide(SDL_Renderer* rendGame, int character)
 {
     musicPlay("songs/startgame.ogg");
     SDL_SetRenderDrawColor(rendGame, 0, 0, 0, 255);
@@ -60,12 +66,15 @@ void initGuide(SDL_Renderer* rendGame)
     {
         SDL_RenderClear(rendGame);
         blendShow(rendGame, "resources/stage.png", 0, 0, i);
+        blendShow(rendGame, charingame[character].c_str(), 800, 0, i);
         imageShow(rendGame, "resources/shadowguide.png", 0, 0);
         SDL_RenderPresent(rendGame);
     }
 
     imageShow(rendGame, "resources/stage.png", 0, 0);
+    imageShow(rendGame, charingame[character].c_str(), 800, 0);
     imageShow(rendGame, "resources/shadowguide.png", 0, 0);
+  
     SDL_RenderPresent(rendGame);
     SDL_Delay(5000);
 
@@ -73,14 +82,27 @@ void initGuide(SDL_Renderer* rendGame)
     {
         SDL_RenderClear(rendGame);
         imageShow(rendGame, "resources/stage.png", 0, 0);
+        imageShow(rendGame, charingame[character].c_str(), 800, 0);
         blendShow(rendGame, "resources/shadowguide.png", 0, 0, i);
         SDL_RenderPresent(rendGame);
     }
 
 }
-void initStage(SDL_Renderer* rendGame)
+void initStage(SDL_Renderer* rendGame, int character)
 {
+    int charw, charh;
+    charimg = IMG_LoadTexture(rendGame, charingame[character].c_str());
+    thugimg = IMG_LoadTexture(rendGame, thugingame[character].c_str());
+    SDL_QueryTexture(charimg, NULL, NULL, &charw, &charh);
+
+    chartexr.x = 800;
+    chartexr.y = 0;
+    chartexr.w = charw;
+    chartexr.h = charh;
+
     int w, h;
+    firework1 = IMG_LoadTexture(rendGame, "resources/firework1.png");
+    firework2 = IMG_LoadTexture(rendGame, "resources/firework2.png");
     stage = IMG_LoadTexture(rendGame, "resources/stage.png");
     SDL_QueryTexture(stage, NULL, NULL, &w, &h);
     texr.x = 0; texr.y = 0; texr.w = w; texr.h = h;
@@ -114,11 +136,9 @@ void initGame(Note * n, int songBPM, float songSpeed, int character)
 
     effectpos = 492;
     effectalpha = 0; effectframecount = 0;
-    phase1 = false;
     hold = false;
     phase2 = false;
     effectanimation = false;
-
 
     (*n).bpm = songBPM;
     (*n).speed = songSpeed;
@@ -129,6 +149,18 @@ void renderGameObjects(SDL_Renderer* rendGame, Note n, int character, int song)
 {
     //render background
     SDL_RenderCopy(rendGame, stage, NULL, &texr);
+    SDL_RenderCopy(rendGame, charimg, NULL, &chartexr);
+    if (songTime.get_ticks() > feverstart[song] && feverChargeCompleted == true)
+    {
+        SDL_RenderCopy(rendGame, thugimg, NULL, &chartexr);
+        if (songTime.get_ticks() % 6000 < 3000)
+            SDL_RenderCopy(rendGame, firework1, NULL, &texr);
+        else
+            SDL_RenderCopy(rendGame, firework2, NULL, &texr);
+       
+    }
+        
+
     if (feverChargeActivated == true) SDL_RenderCopy(rendGame, stageblack, NULL, &texr1);
 
     //render health bar
@@ -175,7 +207,7 @@ void renderGameObjects(SDL_Renderer* rendGame, Note n, int character, int song)
     }
 
     //render stagelight
-    if (feverChargeCompleted == true && frameFinished > feverstart[song])
+    if (feverChargeCompleted == true && songTime.get_ticks() > feverstart[song])
     {
         if (n.beat == true)
             for (int i = 0; i < 5; i++)   random[i] = randomSpawn();
@@ -290,8 +322,7 @@ void feverCharge(SDL_Renderer* rendGame)
         imageZoomShow(rendGame, feverchargeimage[feverChargeState].c_str(), 557, 328, 1000, 1000);
 
 }
-void effectActivate(SDL_Renderer* rendGame, int effectType) {
-    
+void effectActivate(SDL_Renderer* rendGame, int effectType) { 
     if (hold == true)
     {
         imageShow(rendGame, effectimage[effectType].c_str(), 300, effectpos);
@@ -333,14 +364,22 @@ void effectActivate(SDL_Renderer* rendGame, int effectType) {
 
 
 }
+void destroyTexture() {
+    SDL_DestroyTexture(stage); 
+    SDL_DestroyTexture(stageblack); 
+    SDL_DestroyTexture(charimg); 
+    SDL_DestroyTexture(thugimg); 
+    SDL_DestroyTexture(firework1); 
+    SDL_DestroyTexture(firework2);
+}
 void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song, string songlocation, int character)
 {
     Note n;  
 
     //initialize game
     initGame(&n, songBPM, songSpeed, character);
-    initGuide(rendGame);
-    initStage(rendGame);
+    initGuide(rendGame, character);
+    initStage(rendGame,character);
 
     //play music
     musicPlay(songlocation.c_str()); Mix_PauseMusic();
@@ -354,6 +393,7 @@ void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song, s
         //render game objects
         renderGameObjects(rendGame, n, character, song);
 
+       // imageShow(rendGame, charingame[character].c_str(), 800, 0);
         //activate countdown
         if (countdownActivated == true)
         {
@@ -372,11 +412,22 @@ void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song, s
             n.move();
             n.removeStatus();
 
-            //active fever charging
+            //active fever
             if (songTime.get_ticks() > feverchargestart[song] && songTime.get_ticks() < feverchargeend[song])
                 feverCharge(rendGame);
             if (songTime.get_ticks() >= feverchargeend[song]) feverChargeActivated = false;
+            if (songTime.get_ticks() > feverstart[song] && feverChargeCompleted == true)
+            {
+                if (feverNoti == true)
+                {
+                    effectanimation = true;
+                    effectType = 4;
+                    feverNoti = false;
+                }
+                n.score++;
+            }
 
+            //effect
             if (effectanimation == true)
                 effectActivate(rendGame, effectType);
             
@@ -530,6 +581,7 @@ void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song, s
             Mix_HaltMusic();
             sfxPlay(2);
             SDL_Delay(4000);
+            destroyTexture();
             gameExit = true;
         }
 
@@ -548,7 +600,8 @@ void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song, s
                 SDL_RenderPresent(rendGame);
                 Mix_HaltMusic();
                 sfxPlay(2);
-                SDL_Delay(4000);
+                SDL_Delay(4000); 
+                destroyTexture();
                 break;
             }
         }
