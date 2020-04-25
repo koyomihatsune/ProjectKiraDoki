@@ -39,9 +39,9 @@ const int LOGO_POS_START_X = 183, LOGO_POS_START_Y = 80;
 string info[12] = {
 						"World-qualified DJ with ",
 						"flying colors.",
-						"Just play & see what surprise",
-						"Turo can bring you!",
-
+						"DJ Turo gives you more health ",
+						"while playing!",
+			
 						"A girl who fell in love",
 						"with her guitar.",
 						"Hanako gives you special ",
@@ -49,6 +49,6 @@ string info[12] = {
 
 						"This girl's talent can ",
 						"deeply touch your heart.",
-						"Tsubaki gives you more health ",
-						"while playing!",
+						"Just play & see what surprise",
+						"Tsubaki can bring you!",
 };

@@ -22,6 +22,7 @@ void imageShow(SDL_Renderer* renderer, const char* imgsource, int posX, int posY
     SDL_DestroyTexture(img);
 
 }
+
 void blendShow(SDL_Renderer* renderer, const char* imgsource, int posX, int posY, int alpha)
 {
     SDL_Texture* img = NULL;

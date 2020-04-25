@@ -12,11 +12,13 @@ extern struct Note
     float tilePos[10];      //position on screen (from -150 -> 720)
     int tileLane[10];       //x: 1/2/3/4 combine with randomSpawn();
     bool tilePress[10];     //pressed = true - not pressed = false;
+    bool tileSpecial[10];
     
     //HEALTH AND SCORE COUNT
     int health = 20;
     int score = 0;
     int charskill;
+    int specialNoteSpawn = 0;
 
     bool spawnCheck = false;
 
@@ -30,5 +32,31 @@ extern struct Note
     void move();
 };
 
+extern class Timer
+{
+private:
+    //The clock time when the timer started
+    int startTicks;
+
+    //The ticks stored when the timer was paused
+    int pausedTicks;
+
+    //The timer status
+    bool paused;
+    bool started;
+
+public:
+    //Initializes variables
+    Timer();
+
+    //The various clock actions
+    void start();
+    void stop();
+    void pause();
+    void unpause();
+
+    //Gets the timer's time
+    int get_ticks();
+};
 
 

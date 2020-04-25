@@ -20,7 +20,7 @@ SDL_Event gameEvent;
 Uint32 frameStart;
 
 //for game control
-bool gamePause, gameExit, countdownActivated, gameLose;
+bool gamePause, gameExit, countdownActivated, gameLose, pauseStartRecord = false;
 int lastPressed;
 
 //for fever mode
@@ -34,9 +34,17 @@ int feverChargeMax;
 int zoom;
 bool zoomfinish;
 
+//for effect text
+float effectpos;
+int effectalpha, effectframecount;
+bool phase1, hold, phase2;
+bool effectanimation;
+int effectType;
+
 //other
 int maxhealth[3] = { 20,20,15 };
 int random[5] = { 1,2,3,4,5 };
+Timer songTime;
 
 void initGuide(SDL_Renderer* rendGame)
 {
@@ -104,6 +112,14 @@ void initGame(Note * n, int songBPM, float songSpeed, int character)
     zoom = 1000;
     zoomfinish = false;
 
+    effectpos = 492;
+    effectalpha = 0; effectframecount = 0;
+    phase1 = false;
+    hold = false;
+    phase2 = false;
+    effectanimation = false;
+
+
     (*n).bpm = songBPM;
     (*n).speed = songSpeed;
     (*n).health = maxhealth[character];
@@ -128,6 +144,20 @@ void renderGameObjects(SDL_Renderer* rendGame, Note n, int character, int song)
         filled_rect.h = 35;
         SDL_RenderFillRect(rendGame, &filled_rect);
     }
+    
+    for (int i = 0; i < 5; i++)
+        if (checkMouseHover(300 + i * 100, 0, 400 + i * 100, 720) == true)
+             {
+                    SDL_Rect hover_rect;
+                     hover_rect.x = 300 + i  * 100;
+                     hover_rect.y = 0;
+                     hover_rect.w = 100;
+                     hover_rect.h = 720;
+                     SDL_SetRenderDrawColor(rendGame, 255, 255, 255, 30);
+                     SDL_SetRenderDrawBlendMode(rendGame, SDL_BLENDMODE_BLEND);
+                     SDL_RenderFillRect(rendGame, &hover_rect);
+             }
+ 
 
     //render notes
     n.render(rendGame);
@@ -197,7 +227,9 @@ void countdownActivate(SDL_Renderer* rendGame)
     SDL_Delay(500);
 
     Mix_ResumeMusic();
+    songTime.unpause();
     countdownActivated = false;
+    
 }
 void pauseActivate(SDL_Renderer* rendGame)
 {
@@ -225,7 +257,7 @@ void feverCharge(SDL_Renderer* rendGame)
     for (int i = 0; i <= feverChargePress; i++)
     {
         SDL_Rect filled_rect;
-        filled_rect.x = 384 + (float)i * ((float)166 / feverChargeMax);
+        filled_rect.x = 387 + (float)i * ((float)166 / feverChargeMax);
         filled_rect.y = 328;
         filled_rect.w = (float)i * ((float)166 / feverChargeMax);
         filled_rect.h = 32;
@@ -240,7 +272,7 @@ void feverCharge(SDL_Renderer* rendGame)
     {
         if (zoom < 1030 && zoomfinish == false)
         {
-            imageZoomShow(rendGame, feverchargeimage[feverChargeState].c_str(), 557, 328, zoom, zoom);  zoom += 5;
+            imageZoomShow(rendGame, feverchargeimage[feverChargeState].c_str(), 557, 328, zoom, zoom);  zoom += 6;
         }
         if (zoom >= 1030) zoomfinish = true;
         if (zoom >= 1000 && zoomfinish == true)
@@ -258,6 +290,49 @@ void feverCharge(SDL_Renderer* rendGame)
         imageZoomShow(rendGame, feverchargeimage[feverChargeState].c_str(), 557, 328, 1000, 1000);
 
 }
+void effectActivate(SDL_Renderer* rendGame, int effectType) {
+    
+    if (hold == true)
+    {
+        imageShow(rendGame, effectimage[effectType].c_str(), 300, effectpos);
+        effectframecount++;
+        if (effectframecount >= 90)
+        {
+            effectframecount = 0;
+            hold = false;
+            phase2 = true;
+        }
+
+    }
+    else if (phase2 == true)
+    {
+        blendShow(rendGame, effectimage[effectType].c_str(), 300, effectpos, effectalpha);
+        effectalpha -= 15;
+        effectpos -= 0.2;
+        if (effectalpha < 2)
+        {
+
+            phase2 = false;
+            effectalpha = 0;
+            phase1 = true;
+            effectpos = 492;
+            effectanimation = false;
+        }
+    }
+    else
+    {
+            blendShow(rendGame, effectimage[effectType].c_str(), 300, effectpos, effectalpha);
+            effectalpha += 15;
+            effectpos -= 0.2;
+            if (effectalpha >= 255)
+            {
+                effectalpha = 255;
+                hold = true;
+            }
+    }
+
+
+}
 void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song, string songlocation, int character)
 {
     Note n;  
@@ -269,6 +344,7 @@ void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song, s
 
     //play music
     musicPlay(songlocation.c_str()); Mix_PauseMusic();
+    songTime.start();
 
     while (gameExit == false)
     {
@@ -279,10 +355,14 @@ void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song, s
         renderGameObjects(rendGame, n, character, song);
 
         //activate countdown
-        if (countdownActivated == true) countdownActivate(rendGame);
+        if (countdownActivated == true)
+        {
+            countdownActivate(rendGame);
+        }
 
         if (gamePause == false)
         {
+
             //render pause button
             imageShow(rendGame, "resources/pause.png", PAUSE_X_START, PAUSE_Y_START);
             if (checkMouseHover(PAUSE_X_START, PAUSE_Y_START, PAUSE_X_END, PAUSE_Y_END) == true)
@@ -291,12 +371,15 @@ void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song, s
             //move notes
             n.move();
             n.removeStatus();
-            frameFinished++;
 
             //active fever charging
-            if (frameFinished > feverchargestart[song] && frameFinished < feverchargeend[song])
+            if (songTime.get_ticks() > feverchargestart[song] && songTime.get_ticks() < feverchargeend[song])
                 feverCharge(rendGame);
-            if (frameFinished == feverchargeend[song]) feverChargeActivated = false;
+            if (songTime.get_ticks() >= feverchargeend[song]) feverChargeActivated = false;
+
+            if (effectanimation == true)
+                effectActivate(rendGame, effectType);
+            
         }
         else pauseActivate(rendGame); //active pause UI
 
@@ -304,11 +387,9 @@ void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song, s
         textSet1(rendGame, to_string(n.score), 32, 1, 2, 35, 60);
 
         //DEBUG ONLY: show frame finished
-        textSet1(rendGame, to_string(frameFinished), 32, 1, 2, 0, 0);
+        textSet1(rendGame, to_string(songTime.get_ticks()), 32, 1, 2, 0, 0);
 
-        //render
-        SDL_RenderPresent(rendGame);
-
+       
         //stablize frame and beat
         if (gamePause == false) frameStablizer1(&n, &frameStart);
 
@@ -346,14 +427,32 @@ void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song, s
                 }
                 if (check == true)
                 {
-                    if (frameFinished > feverchargestart[song] && frameFinished < feverchargeend[song] && feverChargePress < feverChargeMax)
+
+                    if (songTime.get_ticks() > feverchargestart[song] && songTime.get_ticks() < feverchargeend[song] && feverChargePress < feverChargeMax)
                         feverChargePress++;
                     feverAnimation = true;
                     n.tilePress[tileLastest] = true;
-                    n.score += 1000;
+                    n.score += scoreAdd[character] + rand() % 30;
+                    if (n.tileSpecial[tileLastest] == true)
+                    {
+                        if (character == 1)
+                        {
+                            n.score += rand() % 10 + 50;
+                            effectanimation = true; effectType = 3;
+                        }
+                        if (character == 0 && n.health < maxhealth[character])
+                        {
+                            n.health += rand() % 1 + 1;
+                            effectanimation = true; effectType = 0;
+                        }
+                    }
                     lastPressed = n.tileLane[tileLastest];
                 }
-                else n.health--;
+                else 
+                {
+                    effectanimation = true; if (n.health < maxhealth[character] / 4) effectType = 2; else effectType = 1;
+                    n.health--;
+                }
 
             }
             else if (gameEvent.type == SDL_MOUSEBUTTONDOWN) {
@@ -365,6 +464,7 @@ void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song, s
                     {
                         Mix_PauseMusic();
                         gamePause = true;
+                        songTime.pause();
                     }
                     else if (gamePause == false)
                     {
@@ -378,14 +478,32 @@ void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song, s
 
                         if (check == true)
                         {
-                            if (frameFinished > feverchargestart[song] && frameFinished < feverchargeend[song] && feverChargePress < feverChargeMax)
+                            if (songTime.get_ticks() > feverchargestart[song] && songTime.get_ticks() < feverchargeend[song] && feverChargePress < feverChargeMax)
                                 feverChargePress++;
                             feverAnimation = true;
                             n.tilePress[tileLastest] = true;
-                            n.score += 1000;
+                            n.score += scoreAdd[character] + rand() % 30;
+                            if (n.tileSpecial[tileLastest] == true)
+                            {
+                                if (character == 1)
+                                {
+                                    n.score += rand() % 10 + 50;
+                                    effectanimation = true; effectType = 3;
+                                }
+                                if (character == 0 && n.health < maxhealth[character])
+                                {
+                                    n.health += rand() % 1 + 1;
+                                    effectanimation = true; effectType = 0;
+                                 
+                                }
+                            }
                             lastPressed = n.tileLane[tileLastest];
                         }
-                        else if (mouseX>300 && mouseX<800) n.health--;
+                        else if (mouseX > 300 && mouseX < 800)
+                        {
+                            effectanimation = true;  if (n.health < maxhealth[character] / 4) effectType = 2; else effectType = 1;
+                            n.health--;
+                        }
                     }
                     else if (gamePause == true)
                     {
@@ -400,6 +518,9 @@ void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song, s
             }
 
         }
+
+        //render
+        SDL_RenderPresent(rendGame);
 
         if (n.health <= 0)
         {

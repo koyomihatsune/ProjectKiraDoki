@@ -292,6 +292,7 @@ void songPicker(SDL_Renderer* renderer)
 							pickedchar = q;
 							for (int k = 0; k < 3; k++)
 								if (k != q) charchecked[k] = false;
+							SDL_DestroyTexture(background1); SDL_DestroyTexture(background2);
 							background1 = IMG_LoadTexture(renderer, background[pickedchar].c_str());
 							background2 = IMG_LoadTexture(renderer, background[pickedchar].c_str());
 						}
