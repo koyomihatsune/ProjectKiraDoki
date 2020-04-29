@@ -27,27 +27,6 @@ int main(int argc, char* argv[])
 	initSDL(window, renderer, SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE);
     srand(time(0));
     initMedia(); showMenu(renderer, 1); 
-    
-    //for welcome screen and intialization change 2 to 1;
- 
-   // SDL_Delay(3000);
-
-   // float effectpos = 492;
-   //  int effectalpha=0, framecount=0;
-   // bool finish = false, phase1=true, hold=false, phase2=false;
-   // bool effectanimation = true;
-
-   // SDL_Delay(3000);
-   // while (effectanimation == true)
-   // {
-   //     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); SDL_RenderClear(renderer);
-   //    
-   //     
-
-   //     SDL_RenderPresent(renderer);
-   //    
-   // }
-   //
-   
+    SDL_Quit();
     return 0;
 }

@@ -4,9 +4,11 @@
 
 ### GIỚI THIỆU
 
+
 **MÔ TẢ**
 
 Đây là một game âm nhạc với luật chơi đơn giản.
+
 
 **HƯỚNG DẪN CHƠI**
 
@@ -24,11 +26,26 @@ Mỗi độ khó sẽ thử thách bạn với tốc độ tăng dần, nhạc r
 Game có 3 nhân vật chính siêu dễ thương: DJ Turo, Hanako và Tsubaki.
 Bạn có thể tự chọn nhân vật với kĩ năng khác nhau để hỗ trợ bạn chơi vui hơn.
 
+
+### CÁCH TẢI
+
+Yêu câu cài đặt trước:
+1. **Microsoft Visual C++ Redistributable for Visual Studio 2015.**
+Tải về: [vc_redist.x86.exe](https://aka.ms/vs/16/release/vc_redist.x86.exe), [vc_redist.x64.exe](https://aka.ms/vs/16/release/vc_redist.x64.exe)
+1. **Universal C Runtime** (Đối với phiên bản cũ hơn Windows 10) Tải về: [Universal C Runtime](https://support.microsoft.com/en-us/help/2999226/update-for-universal-c-runtime-in-windows)
+
+Phiên bản chơi được có sẵn trong mục Release của repo này:
+
+**LINK TẢI GAME:**     [WINDOWS](https://github.com/vakoyomi/KiraDokiProject/releases)
+
+Để chơi, giải nén thư mục và chạy file KiraDokiProject.exe
+
+
 ### THƯ VIỆN VÀ CẤU HÌNH VISUAL STUDIO
 
 **CẤU HÌNH HIỆN THỜI**
 
-1. **Solution configuration:** Debug
+1. **Solution configuration:** Debug/Release
 1. **Solution platform:** x86 (Win32)
 1. **Version:** Visual Studio 2019 (16.5.1)
 
@@ -74,6 +91,19 @@ Each difficulty level will challenge you with continuously increasing speed, rem
 
 There are three cute characters to choose: DJ Turo, Hanako & Tsubaki.
 You can choose different characters with different skills to help you play better.
+
+### HOW TO INSTALL
+
+Requires installing these packages first:
+1. **Microsoft Visual C++ Redistributable for Visual Studio 2015.**
+Download: [vc_redist.x86.exe](https://aka.ms/vs/16/release/vc_redist.x86.exe), [vc_redist.x64.exe](https://aka.ms/vs/16/release/vc_redist.x64.exe)
+1. **Universal C Runtime** (for older versions than Windows 10) Download: [Universal C Runtime](https://support.microsoft.com/en-us/help/2999226/update-for-universal-c-runtime-in-windows)
+
+The playable game is available in the Release tab of this repo:
+
+**DOWNLOAD LINK:**     [WINDOWS](https://github.com/vakoyomi/KiraDokiProject/releases)
+
+To play, extract the zip file and run KiraDokiProject.exe.
 
 ### INSTALL & REQUIREMENTS
 

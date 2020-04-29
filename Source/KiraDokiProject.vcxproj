@@ -158,6 +158,7 @@
   <ItemGroup>
     <ClInclude Include="beatFrameStablizer.h" />
     <ClInclude Include="gameconfig.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="songconfig.h" />
     <ClInclude Include="UIconfig.h" />
     <ClInclude Include="mainMenu.h" />
@@ -169,6 +170,9 @@
     <ClInclude Include="newGame.h" />
     <ClInclude Include="noteHandle.h" />
     <ClInclude Include="SDL_utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="KiraDokiProject.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

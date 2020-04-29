@@ -188,7 +188,8 @@ void renderGameObjects(SDL_Renderer* rendGame, Note n, int character, int song)
     //render score
     textSet1(rendGame, to_string(n.score), 32, 1, 2, 35, 60);
 
-    textSet1(rendGame, to_string(songTime.get_ticks()), 25, 1, 2, 0, 0);
+    //DEBUG ONLY
+    //textSet1(rendGame, to_string(songTime.get_ticks()), 25, 1, 2, 0, 0);
     
     //render lane mouse hover
     for (int i = 0; i < 5; i++)

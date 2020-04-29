@@ -316,11 +316,11 @@ void showMenu(SDL_Renderer* renderer, int n)
 	helpopen = false;
 	musicPlay("songs/theme.ogg");
 	if (n == 1) welcomeAnimation(renderer);
-
+	bool quitCheck = false;
 	bool songPickerShow = false;
 	SDL_Event e;
 
-	while (songPickerShow == false)
+	while (songPickerShow == false && quitCheck == false)
 	{
 		SDL_RenderClear(renderer);
 		showBackground(renderer, 1);
@@ -371,17 +371,17 @@ void showMenu(SDL_Renderer* renderer, int n)
 					else if (e.button.x > QUIT_POS_START_X && e.button.y > QUIT_POS_START_Y && e.button.x < QUIT_POS_END_X && e.button.y < QUIT_POS_END_Y)
 					{
 						SDL_Quit();
+						quitCheck = true;
+						break;
 					}
 					else if (e.button.x > HELP_POS_START_X && e.button.y > HELP_POS_START_Y && e.button.x < HELP_POS_END_X && e.button.y < HELP_POS_END_Y)
 					{
 						if (helpopen == false)
 						{
 							helpopen = true;
-					
 						}
 						else
 						helpopen = false;
-				
 					}
 			}
 		}
@@ -392,4 +392,5 @@ void showMenu(SDL_Renderer* renderer, int n)
 
 		SDL_RenderPresent(renderer);
 	}
+
 }
