@@ -1,5 +1,5 @@
 ![KiraDokiProjectLogo](https://raw.githubusercontent.com/vakoyomi/KiraDokiProject/master/Source/resources/logo.png?token=AOTKXBXKNTR4FA7OCXJOOSC6VHQSO)
-# The Kira Kira Doki Doki rhythm game 
+# The Kira Kira Doki Doki Rhythm Game 
 **Codename: KiraDokiProject**
 
 ### GIỚI THIỆU
@@ -28,7 +28,7 @@ Mỗi độ khó sẽ thử thách bạn với tốc độ tăng dần, nhạc r
 Game có 3 nhân vật chính siêu dễ thương: DJ Turo, Hanako và Tsubaki.
 Bạn có thể tự chọn nhân vật với kĩ năng khác nhau để hỗ trợ bạn chơi vui hơn.
 
-
+-----
 ### CÁCH TẢI
 
 Yêu câu cài đặt trước:
@@ -42,7 +42,7 @@ Phiên bản chơi được có sẵn trong mục Release của repo này:
 
 Để chơi, giải nén thư mục và chạy file KiraDokiProject.exe
 
-
+-----
 ### THƯ VIỆN VÀ CẤU HÌNH VISUAL STUDIO
 
 **CẤU HÌNH HIỆN THỜI**
@@ -60,12 +60,12 @@ Tải về: [vc_redist.x86.exe](https://aka.ms/vs/16/release/vc_redist.x86.exe),
 1. **SDL2_image** (SDL2_image-2.0.5)
 1. **SDL2_mixer** (SDL2_mixer-2.0.4)
 
-**DANH SÁCH FILE DLL**
+**DANH SÁCH FILE DLL** https://pastebin.com/tinV4KK9
 
-libFLAC-8.dll, libfreetype-6.dll, libjpeg-9.dll, libmodplug-1.dll, libmpg123-0.dll, libogg-0.dll, libopus-0.dll, libopusfile-0.dll, libpng16-16.dll, libtiff-5.dll, libvorbis-0.dll, libvorbisfile-3.dll, libwebp-7.dll, SDL2.dll, SDL2_image.dll, SDL2_mixer.dll, SDL2_ttf.dll, zlib1.dll
 
+-----
 ### TÁC GIẢ
-1. **Viết bởi:** Nguyen Viet Anh (19021212)
+1. **Viết bởi:** Nguyễn Việt Anh (19021212)
 1. INT2215 22 - Đại học Công Nghê, ĐHQGHN.
 1. **Ngày bắt đầu:** March 30, 2020
 1. **Ngôn ngữ:** Tiếng Anh (English)
@@ -96,6 +96,8 @@ Each difficulty level will challenge you with continuously increasing speed, rem
 There are three cute characters to choose: DJ Turo, Hanako & Tsubaki.
 You can choose different characters with different skills to help you play better.
 
+-----
+
 ### HOW TO INSTALL
 
 Requires installing these packages first:
@@ -109,6 +111,7 @@ The playable game is available in the Release tab of this repo:
 
 To play, extract the zip file and run KiraDokiProject.exe.
 
+-----
 ### DEVELOPING REQUIREMENTS
 
 **CONFIGURATIONS**
@@ -126,8 +129,9 @@ Download: [vc_redist.x86.exe](https://aka.ms/vs/16/release/vc_redist.x86.exe), [
 1. **SDL2_image** (SDL2_image-2.0.5)
 1. **SDL2_mixer** (SDL2_mixer-2.0.4)
 
-**DLL FILES LIST**
-libFLAC-8.dll, libfreetype-6.dll, libjpeg-9.dll, libmodplug-1.dll, libmpg123-0.dll, libogg-0.dll, libopus-0.dll, libopusfile-0.dll, libpng16-16.dll, libtiff-5.dll, libvorbis-0.dll, libvorbisfile-3.dll, libwebp-7.dll, SDL2.dll, SDL2_image.dll, SDL2_mixer.dll, SDL2_ttf.dll, zlib1.dll
+**DLL FILES LIST** https://pastebin.com/tinV4KK9
+
+---
 
 ### CREDITS
 1. **Developed by:** Nguyen Viet Anh (19021212)
