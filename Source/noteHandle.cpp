@@ -31,6 +31,8 @@ void Note::render(SDL_Renderer* renderer)
                        SDL_SetRenderDrawColor(renderer, 204, 136, 0, 255);
                    else if (charskill == 0) //DJ Turo
                        SDL_SetRenderDrawColor(renderer, 0, 255, 191, 255);
+                   else if (charskill == 2)
+                       SDL_SetRenderDrawColor(renderer, 153, 138, 211, 255);
                }
             }
             else
@@ -82,9 +84,9 @@ void Note::move() //move and spawn new notes
                 check = true;
                 tileStatus[l] = true;
                 tilePos[l] = 0;
-                tileLane[l] = randomSpawn();
+                tileLane[l] = rand() % 5;
                 tilePress[l] = false;
-                if (specialNoteSpawn == 30)
+                if (specialNoteSpawn == 25)
                 {
                     tileSpecial[l] = true;
                     specialNoteSpawn = rand() % 5;

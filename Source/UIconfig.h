@@ -49,8 +49,8 @@ string info[12] = {
 
 						"This girl's talent can ",
 						"deeply touch your heart.",
-						"Just play & see what surprise",
-						"Tsubaki can bring you!",
+						"Tsubaki gives you random health",
+						"and score while playing.",
 };
 
 string about[23] = {

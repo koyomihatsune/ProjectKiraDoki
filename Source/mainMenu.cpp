@@ -33,6 +33,7 @@ void initMedia()
 }
 void welcomeAnimation(SDL_Renderer* renderer) 
 {
+	SDL_ShowCursor(SDL_DISABLE);
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 	for (int i = 0; i <= 255; i += 10)
 	{
@@ -97,6 +98,7 @@ void welcomeAnimation(SDL_Renderer* renderer)
 		blendShow(renderer, quitbutton[pickedchar].c_str(), QUIT_POS_START_X, QUIT_POS_START_Y, i);
 		SDL_RenderPresent(renderer);
 	}
+	SDL_ShowCursor(SDL_ENABLE);
 }
 void showBackground(SDL_Renderer* renderer, int n)
 {

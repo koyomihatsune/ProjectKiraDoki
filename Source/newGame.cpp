@@ -54,6 +54,8 @@ Timer songTime;
 //initializing variables
 void initGuide(SDL_Renderer* rendGame, int character)
 {
+    SDL_ShowCursor(SDL_DISABLE);
+    
     musicPlay("songs/startgame.ogg");
     SDL_SetRenderDrawColor(rendGame, 0, 0, 0, 255);
     for (int i = 0; i <= 255; i += 10)
@@ -86,7 +88,7 @@ void initGuide(SDL_Renderer* rendGame, int character)
         blendShow(rendGame, "resources/shadowguide.png", 0, 0, i);
         SDL_RenderPresent(rendGame);
     }
-
+    SDL_ShowCursor(SDL_ENABLE);
 }
 void initStage(SDL_Renderer* rendGame, int character)
 {
@@ -147,6 +149,9 @@ void initGame(Note * n, int songBPM, float songSpeed, int character)
     (*n).speed = songSpeed;
     (*n).health = maxhealth[character];
     (*n).charskill = character;
+
+    for (int i = 0; i < 10; i++)
+        (*n).tileStatus[i] = false; 
 }
 
 //for effects
@@ -201,6 +206,7 @@ void renderGameObjects(SDL_Renderer* rendGame, Note n, int character, int song)
 
     //render notes
     n.render(rendGame);
+
 
     //render lane line
     for (int i = 1; i < 5; i++)
@@ -395,7 +401,7 @@ void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song, s
 
     while (gameExit == false)
     {
-        frameStart = SDL_GetTicks();
+        
         SDL_SetRenderDrawColor(rendGame, 255, 255, 255, 255); SDL_RenderClear(rendGame);
 
         //render game objects
@@ -479,16 +485,31 @@ void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song, s
                     n.score += scoreAdd[character] + rand() % 30;
                     if (n.tileSpecial[tileLastest] == true)
                     {
-                        if (character == 1)
-                        {
-                            n.score += rand() % 10 + 50;
-                            effectanimation = true; effectType = 3;
-                        }
-                        if (character == 0 && n.health < maxhealth[character])
-                        {
+                        switch (character){
+                        case 0:
                             n.health += rand() % 1 + 1;
                             effectanimation = true; effectType = 0;
+                            break;
+                        case 1:
+                            n.score += rand() % 10 + 50;
+                            effectanimation = true; effectType = 3;
+                        case 2:
+                           //random skill
+                                if (rand() % 2 == 1 && n.health < maxhealth[character])
+                                {
+                                    n.health += rand() % 1 + 1;
+                                    effectanimation = true; effectType = 0;
+                                }
+                                else
+                                {
+                                    n.score += rand() % 10 + 50;
+                                    effectanimation = true; effectType = 3;
+                                }
+
+                             break;
+
                         }
+                        
                     }
                     lastPressed = n.tileLane[tileLastest];
                 }
@@ -528,16 +549,31 @@ void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song, s
                             n.score += scoreAdd[character] + rand() % 30;
                             if (n.tileSpecial[tileLastest] == true)
                             {
-                                if (character == 1)
-                                {
-                                    n.score += rand() % 10 + 50;
-                                    effectanimation = true; effectType = 3;
-                                }
-                                if (character == 0 && n.health < maxhealth[character])
-                                {
+                                switch (character) {
+                                case 0:
                                     n.health += rand() % 1 + 1;
                                     effectanimation = true; effectType = 0;
+                                    break;
+                                case 1:
+                                    n.score += rand() % 10 + 50;
+                                    effectanimation = true; effectType = 3;
+                                case 2:
+                                    //random skill
+                                    if (rand() % 2 == 1 && n.health < maxhealth[character])
+                                    {
+                                        n.health += rand() % 1 + 1;
+                                        effectanimation = true; effectType = 0;
+                                    }
+                                    else
+                                    {
+                                        n.score += rand() % 10 + 50;
+                                        effectanimation = true; effectType = 3;
+                                    }
+
+                                    break;
+
                                 }
+
                             }
                             lastPressed = n.tileLane[tileLastest];
                         }
@@ -571,6 +607,7 @@ void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song, s
             countdownActivate(rendGame);
             SDL_ShowCursor(SDL_ENABLE);
         }
+        frameStart = SDL_GetTicks();
 
         if (n.health <= 0)
         {
