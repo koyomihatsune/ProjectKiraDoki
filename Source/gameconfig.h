@@ -10,9 +10,9 @@ string thugingame[3] = { "resources/char/djturothug.png", "resources/char/hanako
 string feverchargeimage[3] = { "resources/fever1.png", "resources/fever2.png", "resources/fever3.png" };
 string effectimage[5] = { "resources/effect/healthadd.png", "resources/effect/healthsubstract.png", "resources/effect/healthlow.png", "resources/effect/scorebonus.png", "resources/effect/feveractivated.png" };
 
-int feverchargestart[10] = { 38443, 10000000, 10000000, 10000000 };
-int feverchargeend[10] = { 38443 + 23000, 10000000 , 10000000 , 10000000 };
-int feverstart[10]= { 64000, 10000000, 10000000, 10000000 };
+int feverchargestart[10] = { 38443, 35480, 52000, 10000000, 53000, 10000000, 10000000, 10000000, 10000000 };
+int feverchargeend[10] = { 38443 + 23000, 35480+25000 , 64000, 10000000, 70000, 10000000 ,10000000 ,10000000 , 10000000 };
+int feverstart[10]= { 64000,  35480 + 31000, 66000, 10000000, 78000, 10000000 ,10000000 ,10000000 ,10000000 };
 int scoreAdd[3] = { 950, 900, 850 };
 
 string stagelight[5] = { "resources/bottomlane_1.png", "resources/bottomlane_2.png", "resources/bottomlane_3.png", "resources/bottomlane_4.png", "resources/bottomlane_2.png" };

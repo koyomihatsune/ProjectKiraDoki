@@ -51,7 +51,7 @@ int maxhealth[3] = { 20,20,15 };
 int random[5] = { 1,2,3,4,5 };
 Timer songTime;
 
-
+//initializing variables
 void initGuide(SDL_Renderer* rendGame, int character)
 {
     musicPlay("songs/startgame.ogg");
@@ -116,7 +116,7 @@ void initStage(SDL_Renderer* rendGame, int character)
 }
 void initGame(Note * n, int songBPM, float songSpeed, int character)
 {
-    gamePause = false;
+    gamePause = true;
     gameExit = false;
     countdownActivated = true;
     gameLose = false;
@@ -129,7 +129,10 @@ void initGame(Note * n, int songBPM, float songSpeed, int character)
     frameFinished = 0;
     feverChargeState = 0;
     feverChargePress = 0;
-    feverChargeMax = 30;
+    
+    if (songBPM < 100 || songBPM == 121) feverChargeMax = 15;
+    else if (songBPM < 200 || songBPM == 360) feverChargeMax = 30;
+    else feverChargeMax = 45;
 
     zoom = 1000;
     zoomfinish = false;
@@ -145,6 +148,8 @@ void initGame(Note * n, int songBPM, float songSpeed, int character)
     (*n).health = maxhealth[character];
     (*n).charskill = character;
 }
+
+//for effects
 void renderGameObjects(SDL_Renderer* rendGame, Note n, int character, int song)
 {
     //render background
@@ -156,11 +161,9 @@ void renderGameObjects(SDL_Renderer* rendGame, Note n, int character, int song)
         if (songTime.get_ticks() % 6000 < 3000)
             SDL_RenderCopy(rendGame, firework1, NULL, &texr);
         else
-            SDL_RenderCopy(rendGame, firework2, NULL, &texr);
-       
+            SDL_RenderCopy(rendGame, firework2, NULL, &texr);    
     }
         
-
     if (feverChargeActivated == true) SDL_RenderCopy(rendGame, stageblack, NULL, &texr1);
 
     //render health bar
@@ -176,7 +179,13 @@ void renderGameObjects(SDL_Renderer* rendGame, Note n, int character, int song)
         filled_rect.h = 35;
         SDL_RenderFillRect(rendGame, &filled_rect);
     }
+
+    //render score
+    textSet1(rendGame, to_string(n.score), 32, 1, 2, 35, 60);
+
+    textSet1(rendGame, to_string(songTime.get_ticks()), 25, 1, 2, 0, 0);
     
+    //render lane mouse hover
     for (int i = 0; i < 5; i++)
         if (checkMouseHover(300 + i * 100, 0, 400 + i * 100, 720) == true)
              {
@@ -189,12 +198,11 @@ void renderGameObjects(SDL_Renderer* rendGame, Note n, int character, int song)
                      SDL_SetRenderDrawBlendMode(rendGame, SDL_BLENDMODE_BLEND);
                      SDL_RenderFillRect(rendGame, &hover_rect);
              }
- 
 
     //render notes
     n.render(rendGame);
 
-    //render the lane
+    //render lane line
     for (int i = 1; i < 5; i++)
     {
         SDL_Rect filled_rect;
@@ -209,7 +217,7 @@ void renderGameObjects(SDL_Renderer* rendGame, Note n, int character, int song)
     //render stagelight
     if (feverChargeCompleted == true && songTime.get_ticks() > feverstart[song])
     {
-        if (n.beat == true)
+        if (n.beat == true) 
             for (int i = 0; i < 5; i++)   random[i] = randomSpawn();
         for (int i = 0; i < 5; i++)
             imageShow(rendGame, stagelight[random[i]].c_str(), 300 + i * 100, 720 - 57);
@@ -221,11 +229,11 @@ void renderGameObjects(SDL_Renderer* rendGame, Note n, int character, int song)
         imageShow(rendGame, stagelight[0].c_str(), 300 + lastPressed * 100, 720 - 57);
     }
 
- 
+   
 }
 void countdownActivate(SDL_Renderer* rendGame)
 {
-    blendShow(rendGame, "resources/countdown.png", 301, 297, 180);
+    blendShow(rendGame, "resources/countdown.png", 301, 297, 255);
     for (int i = 0; i<5; i++)
      imageShow(rendGame, stagelight[2].c_str(), 300 + i * 100, 720 - 57);
     textSet1(rendGame, "3", 50, 0, 2, 524, 331);
@@ -233,7 +241,7 @@ void countdownActivate(SDL_Renderer* rendGame)
     SDL_RenderPresent(rendGame);
     SDL_Delay(1000);
 
-    blendShow(rendGame, "resources/countdown.png", 301, 297, 180);
+    blendShow(rendGame, "resources/countdown.png", 301, 297, 255);
     imageShow(rendGame, stagelight[3].c_str(), 300 + 0 * 100, 720 - 57);
     imageShow(rendGame, stagelight[3].c_str(), 300 + 4 * 100, 720 - 57);
     for (int i = 1; i < 4; i++)
@@ -243,7 +251,7 @@ void countdownActivate(SDL_Renderer* rendGame)
     SDL_RenderPresent(rendGame);
     SDL_Delay(1000);
 
-    blendShow(rendGame, "resources/countdown.png", 301, 297, 180);
+    blendShow(rendGame, "resources/countdown.png", 301, 297, 255);
     for (int i = 0; i < 5; i++)
         imageShow(rendGame, stagelight[3].c_str(), 300 + i * 100, 720 - 57);
     imageShow(rendGame, stagelight[0].c_str(), 300 + 2 * 100, 720 - 57);
@@ -260,8 +268,8 @@ void countdownActivate(SDL_Renderer* rendGame)
 
     Mix_ResumeMusic();
     songTime.unpause();
-    countdownActivated = false;
-    
+    countdownActivated = false;  
+    gamePause = false;
 }
 void pauseActivate(SDL_Renderer* rendGame)
 {
@@ -278,13 +286,12 @@ void feverCharge(SDL_Renderer* rendGame)
 {
     feverChargeActivated = true;
     if (feverChargePress < feverChargeMax / 2 + 1) feverChargeState = 0;
-    if (feverChargePress > feverChargeMax / 2 + 1 && feverChargePress < feverChargeMax)  feverChargeState = 1;
+    if (feverChargePress >= feverChargeMax / 2 + 1 && feverChargePress < feverChargeMax)  feverChargeState = 1;
     if (feverChargePress == feverChargeMax)
     {
         feverChargeState = 2;
         feverChargeCompleted = true;
     }
-    cout << feverChargeState << " " << feverChargePress << endl;
 
     for (int i = 0; i <= feverChargePress; i++)
     {
@@ -320,7 +327,6 @@ void feverCharge(SDL_Renderer* rendGame)
     }
     else
         imageZoomShow(rendGame, feverchargeimage[feverChargeState].c_str(), 557, 328, 1000, 1000);
-
 }
 void effectActivate(SDL_Renderer* rendGame, int effectType) { 
     if (hold == true)
@@ -372,14 +378,16 @@ void destroyTexture() {
     SDL_DestroyTexture(firework1); 
     SDL_DestroyTexture(firework2);
 }
+
+//game control
 void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song, string songlocation, int character)
 {
     Note n;  
 
     //initialize game
-    initGame(&n, songBPM, songSpeed, character);
     initGuide(rendGame, character);
     initStage(rendGame,character);
+    initGame(&n, songBPM, songSpeed, character);
 
     //play music
     musicPlay(songlocation.c_str()); Mix_PauseMusic();
@@ -393,16 +401,8 @@ void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song, s
         //render game objects
         renderGameObjects(rendGame, n, character, song);
 
-       // imageShow(rendGame, charingame[character].c_str(), 800, 0);
-        //activate countdown
-        if (countdownActivated == true)
-        {
-            countdownActivate(rendGame);
-        }
-
         if (gamePause == false)
         {
-
             //render pause button
             imageShow(rendGame, "resources/pause.png", PAUSE_X_START, PAUSE_Y_START);
             if (checkMouseHover(PAUSE_X_START, PAUSE_Y_START, PAUSE_X_END, PAUSE_Y_END) == true)
@@ -430,15 +430,8 @@ void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song, s
             //effect
             if (effectanimation == true)
                 effectActivate(rendGame, effectType);
-            
         }
         else pauseActivate(rendGame); //active pause UI
-
-        //show score
-        textSet1(rendGame, to_string(n.score), 32, 1, 2, 35, 60);
-
-        //DEBUG ONLY: show frame finished
-        textSet1(rendGame, to_string(songTime.get_ticks()), 32, 1, 2, 0, 0);
 
        
         //stablize frame and beat
@@ -457,7 +450,7 @@ void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song, s
         while (SDL_PollEvent(&gameEvent) != 0)
         {
             if (gameEvent.type == SDL_QUIT) break;
-            else if (gameEvent.type == SDL_KEYDOWN && gamePause == false)
+            else if (gameEvent.type == SDL_KEYDOWN)
             {
                 bool check = false;
                 switch (gameEvent.key.keysym.sym)
@@ -472,10 +465,10 @@ void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song, s
                 case SDLK_b:
                     if (n.tileLane[tileLastest] == 3) check = true; break;
                 case SDLK_n:
-                    if (n.tileLane[tileLastest] == 4) check = true;
-                    break;
+                    if (n.tileLane[tileLastest] == 4) check = true; break;
                 default: break;
                 }
+
                 if (check == true)
                 {
 
@@ -499,7 +492,7 @@ void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song, s
                     }
                     lastPressed = n.tileLane[tileLastest];
                 }
-                else 
+                else if (gamePause == false)
                 {
                     effectanimation = true; if (n.health < maxhealth[character] / 4) effectType = 2; else effectType = 1;
                     n.health--;
@@ -517,9 +510,8 @@ void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song, s
                         gamePause = true;
                         songTime.pause();
                     }
-                    else if (gamePause == false)
+                    else if (gamePause == false && countdownActivated == false)
                     {
-
                         bool check = false;
                         if (mouseX > 300 && mouseX < 400) if (n.tileLane[tileLastest] == 0) check = true;
                         if (mouseX > 400 && mouseX < 500) if (n.tileLane[tileLastest] == 1) check = true;
@@ -545,12 +537,11 @@ void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song, s
                                 {
                                     n.health += rand() % 1 + 1;
                                     effectanimation = true; effectType = 0;
-                                 
                                 }
                             }
                             lastPressed = n.tileLane[tileLastest];
                         }
-                        else if (mouseX > 300 && mouseX < 800)
+                        else if (mouseX > 300 && mouseX < 800 && gamePause == false)
                         {
                             effectanimation = true;  if (n.health < maxhealth[character] / 4) effectType = 2; else effectType = 1;
                             n.health--;
@@ -572,6 +563,14 @@ void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song, s
 
         //render
         SDL_RenderPresent(rendGame);
+
+        //activate countdown
+        if (countdownActivated == true)
+        {
+            SDL_ShowCursor(SDL_DISABLE);
+            countdownActivate(rendGame);
+            SDL_ShowCursor(SDL_ENABLE);
+        }
 
         if (n.health <= 0)
         {
@@ -602,8 +601,10 @@ void gameStart(SDL_Renderer* rendGame, int songBPM, float songSpeed, int song, s
                 sfxPlay(2);
                 SDL_Delay(4000); 
                 destroyTexture();
+                gameExit = true;
                 break;
             }
         }
     }
+
 }

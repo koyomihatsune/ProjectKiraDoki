@@ -4,7 +4,7 @@
 #include <string>
 #include "noteHandle.h"
 
-void initGuide(SDL_Renderer* rendGame);
+void initGuide(SDL_Renderer* rendGame, int character);
 void initStage(SDL_Renderer* rendGame, int character);
 void initGame(Note* n, int songBPM, float songSpeed, int character);
 void renderGameObjects(SDL_Renderer* rendGame, Note n, int character, int song);

@@ -15,13 +15,16 @@ bool songchecked[10];
 bool modechecked[3];
 bool charchecked[3];
 
+//init
 int pickedsong = 0;
 int pickedchar = 0;
 
 bool welcomecheck = true;
+bool helpopen = false;
 int backgroundPos = 0;
 
-SDL_Texture* background1 = NULL; SDL_Texture* background2 = NULL;
+SDL_Texture* background1 = NULL; 
+SDL_Texture* background2 = NULL;
 SDL_Rect bkt1, bkt2;
 
 void initMedia()
@@ -139,11 +142,11 @@ void showUI(SDL_Renderer* renderer)
 void showSongs(SDL_Renderer* renderer)
 {
 	//CHOSEN SONG
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 9; i++)
 	{
 		//HOVER SONG
 		if (checkMouseHover(SONG_POS_START_X, SONG_POS_START_Y + i * 40, SONG_POS_END_X, SONG_POS_START_Y + i * 40 + 40) == true && songchecked[i] != true)
-			imageShow(renderer, hoverlong[pickedchar].c_str(), SONG_POS_START_X - 12, SONG_POS_START_Y - 11 + i * 40);
+			if (i!=3) imageShow(renderer, hoverlong[pickedchar].c_str(), SONG_POS_START_X - 12, SONG_POS_START_Y - 11 + i * 40);
 
 		//TEXT SONG
 		if (songchecked[i] == true)
@@ -151,7 +154,7 @@ void showSongs(SDL_Renderer* renderer)
 			imageShow(renderer, chosenlong[pickedchar].c_str(), SONG_POS_START_X - 12, SONG_POS_START_Y - 11 + i * 40);
 			textSet1(renderer, songs[i], 30, 0, 2, SONG_POS_START_X + 12, SONG_POS_START_Y + i * 40);
 		}
-		else	textSet1(renderer, songs[i], 30, 0, 1, SONG_POS_START_X + 12, SONG_POS_START_Y + i * 40);
+		else textSet1(renderer, songs[i], 30, 0, 1, SONG_POS_START_X + 12, SONG_POS_START_Y + i * 40);
 	}
 }
 void showModes(SDL_Renderer* renderer, int * bpmin, float * speedin)
@@ -215,6 +218,7 @@ void showChars(SDL_Renderer* renderer) {
 	}
 
 }
+
 void songPicker(SDL_Renderer* renderer)
 {
 	SDL_Event e;
@@ -258,16 +262,20 @@ void songPicker(SDL_Renderer* renderer)
 			//DROP DOWN LISTS
 				else
 				{
-					for (int q = 0; q < 10; q++)
+					for (int q = 0; q < 9; q++)
 						if (mX > SONG_POS_START_X &&
 							mY > SONG_POS_START_Y + q * 40 &&
 							mX < SONG_POS_END_X &&
 							mY < SONG_POS_START_Y + q * 40 + 40)
 						{
-							songchecked[q] = true;
-							pickedsong = q;
-							for (int k = 0; k < 10; k++)
-								if (k != q) songchecked[k] = false;
+							if (q!=3)
+							{ 
+								songchecked[q] = true;
+								pickedsong = q;
+								for (int k = 0; k < 10; k++)
+									if (k != q) songchecked[k] = false;
+							}
+							
 						}
 
 					for (int q = 0; q < 3; q++)
@@ -276,6 +284,7 @@ void songPicker(SDL_Renderer* renderer)
 							mX < MODE_POS_END_X &&
 							mY < MODE_POS_START_Y + q * 40 + 40)
 						{
+						
 							modechecked[q] = true;
 							for (int k = 0; k < 3; k++)
 								if (k != q) modechecked[k] = false;
@@ -302,6 +311,7 @@ void songPicker(SDL_Renderer* renderer)
 }
 void showMenu(SDL_Renderer* renderer, int n)
 {
+	helpopen = false;
 	musicPlay("songs/theme.ogg");
 	if (n == 1) welcomeAnimation(renderer);
 
@@ -312,12 +322,19 @@ void showMenu(SDL_Renderer* renderer, int n)
 	{
 		SDL_RenderClear(renderer);
 		showBackground(renderer, 1);
-		imageShow(renderer, charimage[pickedchar].c_str(), 532, 0);
 		imageShow(renderer, logo.c_str(), LOGO_POS_START_X, LOGO_POS_START_Y);
 		imageShow(renderer, startbutton[pickedchar].c_str(), START_POS_START_X, START_POS_START_Y);
 		imageShow(renderer, helpbutton[pickedchar].c_str(), HELP_POS_START_X, HELP_POS_START_Y);
 		imageShow(renderer, quitbutton[pickedchar].c_str(), QUIT_POS_START_X, QUIT_POS_START_Y);
+		if (helpopen == false) imageShow(renderer, charimage[pickedchar].c_str(), 532, 0);
+		else
+		{
+			imageShow(renderer, helphover[pickedchar].c_str(), HELP_POS_START_X, HELP_POS_START_Y);
+			for (int i = 0; i < 23; i++)
+				textSet1(renderer, about[i], 24, 0, 1, 520, 88 + i * 26);
+		}
 
+		
 		if (checkMouseHover(START_POS_START_X, START_POS_START_Y, START_POS_END_X, START_POS_END_Y) == true)
 		{
 			imageShow(renderer, starthover[pickedchar].c_str(), START_POS_START_X, START_POS_START_Y);
@@ -352,6 +369,17 @@ void showMenu(SDL_Renderer* renderer, int n)
 					else if (e.button.x > QUIT_POS_START_X && e.button.y > QUIT_POS_START_Y && e.button.x < QUIT_POS_END_X && e.button.y < QUIT_POS_END_Y)
 					{
 						SDL_Quit();
+					}
+					else if (e.button.x > HELP_POS_START_X && e.button.y > HELP_POS_START_Y && e.button.x < HELP_POS_END_X && e.button.y < HELP_POS_END_Y)
+					{
+						if (helpopen == false)
+						{
+							helpopen = true;
+					
+						}
+						else
+						helpopen = false;
+				
 					}
 			}
 		}

@@ -52,3 +52,29 @@ string info[12] = {
 						"Just play & see what surprise",
 						"Tsubaki can bring you!",
 };
+
+string about[23] = {
+						"The Kira Kira Doki Doki Rhythm Game",
+						"Version 1.0",
+						"2020/04/27",
+						" ",
+						"DEVELOPED BY Nguyen Viet Anh",
+						"CLASS: INT2215_22",
+						"University of Engineering & Technology, VNU",
+						" ",
+						"GRAPHICS & UI",
+						"Viet Anh",
+						" ",
+						"MUSIC",
+						"Fur Elise Remix - Klutch",
+						"Alla Turca Remix - Mr. Jazzek",
+						"Your Reality Remix - Miraie (Original: Dan Salvato)",
+						"Doraemon Remix - Ars & Hong PaKorn",
+						" ",
+						"Arts and music tracks are modified by Viet Anh.",
+						"FOR EDUCATIONAL PURPOSES ONLY.",
+						" ",
+						"LIBRARIES & OPEN SOURCE",
+						"SDL Libraries (libsdl.org), Lazyfoo Tutorials.",
+
+};

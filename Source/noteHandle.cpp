@@ -43,8 +43,7 @@ void Note::render(SDL_Renderer* renderer)
                 if (charskill == 1)
                  imageShow(renderer, "resources/scorenote.png", 300 + tileLane[i] * 100, (int)tilePos[i] - 150);
                 if (charskill == 0)
-                    imageShow(renderer, "resources/healthnote.png", 300 + tileLane[i] * 100, (int)tilePos[i] - 150);
-
+                 imageShow(renderer, "resources/healthnote.png", 300 + tileLane[i] * 100, (int)tilePos[i] - 150);
             }
         }
 }
@@ -53,7 +52,6 @@ void Note::removeStatus() //remove the note that is out of screen
 {
     for (int k = 0; k < 10; k++)
         if (tileStatus[k] == true && tilePos[k] >= 720 + 120)
-
         {
             tileStatus[k] = false;
             tileSpecial[k] = false;
@@ -99,6 +97,8 @@ void Note::move() //move and spawn new notes
     }
 }
 
+
+//From SDL Lazyfoo Tutorial
 Timer::Timer()
 {
     //Initialize the variables

@@ -45,6 +45,7 @@ void blendShow(SDL_Renderer* renderer, const char* imgsource, int posX, int posY
     SDL_DestroyTexture(img);
 
 }
+
 void imageZoomShow(SDL_Renderer* renderer, const char* imgsource, int posX, int posY, int zoomw, int zoomh)
 {
     SDL_Texture* img = NULL;
