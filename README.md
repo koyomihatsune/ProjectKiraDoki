@@ -9,6 +9,8 @@
 
 Đây là một game âm nhạc với luật chơi đơn giản.
 
+Clip giới thiệu chi tiết: https://www.youtube.com/watch?v=TW1rARQyKEM
+
 
 **HƯỚNG DẪN CHƠI**
 
@@ -76,6 +78,8 @@ libFLAC-8.dll, libfreetype-6.dll, libjpeg-9.dll, libmodplug-1.dll, libmpg123-0.d
 **ABOUT THIS GAME**
 
 This is a rhythm game with simple rules.
+
+Detail introduction clip: https://www.youtube.com/watch?v=TW1rARQyKEM
 
 **HOW TO PLAY**
 
