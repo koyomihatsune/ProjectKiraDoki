@@ -105,7 +105,7 @@ The playable game is available in the Release tab of this repo:
 
 To play, extract the zip file and run KiraDokiProject.exe.
 
-### INSTALL & REQUIREMENTS
+### DEVELOPING REQUIREMENTS
 
 **CONFIGURATIONS**
 
